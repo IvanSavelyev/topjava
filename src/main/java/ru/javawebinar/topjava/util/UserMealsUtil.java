@@ -67,12 +67,16 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO Implement by streams
-        Map<LocalDate, Integer> caloriesSumInDay = meals.stream().
-                collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
-        //List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
-        return meals.stream().filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime)).
-                map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(),userMeal.getDescription(), userMeal.getCalories(), caloriesSumInDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay)).
-                collect(Collectors.toList());
+        if(!meals.isEmpty()){
+            Map<LocalDate, Integer> caloriesSumInDay = meals.stream().
+                    collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
+            //List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
+            return meals.stream().filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime)).
+                    map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(),userMeal.getDescription(), userMeal.getCalories(), caloriesSumInDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay)).
+                    collect(Collectors.toList());
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 }
