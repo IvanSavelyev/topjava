@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
-        System.out.println("--Begin main method--");
         List<UserMeal> meals = Arrays.asList(
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
@@ -34,11 +33,9 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 13, 0), "Обед", 422),
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 20, 0), "Ужин", 424)
         );
-
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        System.out.println("--Begin filteredByCycles method--");
         if(!meals.isEmpty()){
             Map<LocalDate, Integer> caloriesSumInDay = new HashMap<>();
             int calories = 0;
@@ -97,7 +94,6 @@ public class UserMealsUtil {
                             new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesSumInDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay)
                     );
             }
-            System.out.println("--End filteredByCycles method--");
             return userMealWithExcessList;
         }
         else {
@@ -123,6 +119,5 @@ public class UserMealsUtil {
             System.err.println("IllegalArgumentException");
             throw new IllegalArgumentException();
         }
-
     }
 }
