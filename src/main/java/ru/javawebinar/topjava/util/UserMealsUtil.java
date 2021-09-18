@@ -119,7 +119,10 @@ public class UserMealsUtil {
             //Stream filtering uses iteration internally
             //Time complexity: - O(N + N) = O(N)
         }
-        else
+        else{
+            System.err.println("IllegalArgumentException");
             throw new IllegalArgumentException();
+        }
+
     }
 }
