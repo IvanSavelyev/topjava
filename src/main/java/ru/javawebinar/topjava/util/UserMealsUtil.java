@@ -33,9 +33,7 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 10, 0), "Завтрак", 1111),
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 13, 0), "Обед", 422),
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 20, 0), "Ужин", 424)
-
-
-                );
+        );
 
         List<UserMealWithExcess> mealsFilteredByCycle   = filteredByCycles(meals, LocalTime.of(5, 0), LocalTime.of(15, 0), 400);
         List<UserMealWithExcess> mealsFilteredByStreams = filteredByStreams(meals, LocalTime.of(5, 0), LocalTime.of(15, 0), 600);
@@ -46,8 +44,6 @@ public class UserMealsUtil {
         mealsFilteredByStreams.forEach(System.out::println);
         System.out.println("-------------");
         System.out.println("--End main method--");
-
-
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -132,8 +128,6 @@ public class UserMealsUtil {
                     .filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
                     .map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(),userMeal.getDescription(), userMeal.getCalories(), caloriesSumInDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
                     .collect(Collectors.toList());
-
-
             //Stream filtering uses iteration internally
             //Time complexity: - O(N + N) = O(N)
         }
