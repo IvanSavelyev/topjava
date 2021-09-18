@@ -35,15 +35,6 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 20, 0), "Ужин", 424)
         );
 
-        List<UserMealWithExcess> mealsFilteredByCycle   = filteredByCycles(meals, LocalTime.of(5, 0), LocalTime.of(15, 0), 400);
-        List<UserMealWithExcess> mealsFilteredByStreams = filteredByStreams(meals, LocalTime.of(5, 0), LocalTime.of(15, 0), 600);
-        System.out.println("Cycle Filter");
-        mealsFilteredByCycle.forEach(System.out::println);
-        System.out.println("-------------");
-        System.out.println("Stream Filter");
-        mealsFilteredByStreams.forEach(System.out::println);
-        System.out.println("-------------");
-        System.out.println("--End main method--");
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -88,7 +79,6 @@ public class UserMealsUtil {
             }
             System.out.println("---------Third variant--------");
             caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
-
             //-----------------------------------------------------
 /*            //Fourth variant
             for (UserMeal meal : meals){
@@ -100,7 +90,6 @@ public class UserMealsUtil {
             caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
             //Fourth = Third
 */
-
             List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
             for (UserMeal meal : meals) {
                 if(TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime) && meal.getCalories() > caloriesPerDay)
@@ -133,11 +122,4 @@ public class UserMealsUtil {
         else
             throw new IllegalArgumentException();
     }
-
-    public static Map<Boolean, List<UserMeal>> testFunc(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay){
-        return null;
-       // meals.stream()
-       //         .collect(Collectors.partitioningBy(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime) && userMeal.getCalories() > caloriesPerDay));
-    }
-
 }
