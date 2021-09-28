@@ -33,6 +33,16 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 13, 0), "Обед", 422),
                 new UserMeal(LocalDateTime.of(2020, Month.FEBRUARY, 2, 20, 0), "Ужин", 424)
         );
+        System.out.println("filteredByCycles method");
+        List<UserMealWithExcess> mealsToCycles = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        assert mealsToCycles != null;
+        mealsToCycles.forEach(System.out::println);
+        System.out.println("------------------------");
+        System.out.println("filteredByStreams method");
+        List<UserMealWithExcess> mealsToStreams = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
+        assert mealsToStreams != null;
+        mealsToStreams.forEach(System.out::println);
+        
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -45,7 +55,7 @@ public class UserMealsUtil {
                 if(meals.get(n).getDateTime().toLocalDate().equals(meals.get(n + 1).getDateTime().toLocalDate())){
                     calories += meals.get(n).getCalories();
                     if(n == meals.size() - 2) {
-                        caloriesSumInDay.put(meals.get(n).getDateTime().toLocalDate(), calories += meals.get(n + 1).getCalories());
+                        caloriesSumInDay.put(meals.get(n).getDateTime().toLocalDate(), calories + meals.get(n + 1).getCalories());
                         calories = 0;
                     }
                 }
@@ -58,24 +68,24 @@ public class UserMealsUtil {
                     calories = 0;
                 }
             }
-            System.out.println("---------First variant--------");
-            caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
+            //System.out.println("---------First variant--------");
+            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
             caloriesSumInDay.clear();
             //-----------------------------------------------------
             //Second variant
             for (UserMeal meal : meals){
                 caloriesSumInDay.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
             }
-            System.out.println("---------Second variant--------");
-            caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
+            //System.out.println("---------Second variant--------");
+            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
             caloriesSumInDay.clear();
             //-----------------------------------------------------
             //Third variant
             for (UserMeal meal : meals){
                 caloriesSumInDay.put(meal.getDateTime().toLocalDate(), caloriesSumInDay.getOrDefault(meal.getDateTime().toLocalDate(), 0 ) + meal.getCalories());
             }
-            System.out.println("---------Third variant--------");
-            caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
+            //System.out.println("---------Third variant--------");
+            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
             //-----------------------------------------------------
 /*            //Fourth variant
             for (UserMeal meal : meals){
@@ -89,7 +99,7 @@ public class UserMealsUtil {
 */
             List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
             for (UserMeal meal : meals) {
-                if(TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime) && meal.getCalories() > caloriesPerDay)
+                if(TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
                     userMealWithExcessList.add(
                             new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesSumInDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay)
                     );
@@ -97,8 +107,8 @@ public class UserMealsUtil {
             return userMealWithExcessList;
         }
         else {
-            System.err.println("IllegalArgumentException");
-            throw new IllegalArgumentException();
+            System.err.println("Empty arg input");
+            return null;
         }
         //Time complexity: - O(N + N) = O(N)
     }
@@ -116,8 +126,8 @@ public class UserMealsUtil {
             //Time complexity: - O(N + N) = O(N)
         }
         else{
-            System.err.println("IllegalArgumentException");
-            throw new IllegalArgumentException();
+            System.err.println("Empty arg input");
+            return null;
         }
     }
 }
