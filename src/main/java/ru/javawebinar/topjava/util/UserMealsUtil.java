@@ -3,14 +3,12 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -35,99 +33,46 @@ public class UserMealsUtil {
         );
         System.out.println("filteredByCycles method");
         List<UserMealWithExcess> mealsToCycles = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        assert mealsToCycles != null;
         mealsToCycles.forEach(System.out::println);
         System.out.println("------------------------");
         System.out.println("filteredByStreams method");
         List<UserMealWithExcess> mealsToStreams = filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         assert mealsToStreams != null;
         mealsToStreams.forEach(System.out::println);
-        
+
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        if(!meals.isEmpty()){
-            Map<LocalDate, Integer> caloriesSumInDay = new HashMap<>();
-            int calories = 0;
-            //First variant
-            //-----------------------------------------------------
-            for (int n = 0; n < meals.size() - 1; ++n){
-                if(meals.get(n).getDateTime().toLocalDate().equals(meals.get(n + 1).getDateTime().toLocalDate())){
-                    calories += meals.get(n).getCalories();
-                    if(n == meals.size() - 2) {
-                        caloriesSumInDay.put(meals.get(n).getDateTime().toLocalDate(), calories + meals.get(n + 1).getCalories());
-                        calories = 0;
-                    }
-                }
-                else{
-                    calories += meals.get(n).getCalories();
-                    caloriesSumInDay.put(meals.get(n).getDateTime().toLocalDate(), calories);
-                    if(n == meals.size() - 2){
-                        caloriesSumInDay.put(meals.get(n + 1).getDateTime().toLocalDate(), meals.get(n + 1).getCalories());
-                    }
-                    calories = 0;
-                }
-            }
-            //System.out.println("---------First variant--------");
-            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
-            caloriesSumInDay.clear();
-            //-----------------------------------------------------
-            //Second variant
-            for (UserMeal meal : meals){
-                caloriesSumInDay.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
-            }
-            //System.out.println("---------Second variant--------");
-            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
-            caloriesSumInDay.clear();
-            //-----------------------------------------------------
-            //Third variant
-            for (UserMeal meal : meals){
-                caloriesSumInDay.put(meal.getDateTime().toLocalDate(), caloriesSumInDay.getOrDefault(meal.getDateTime().toLocalDate(), 0 ) + meal.getCalories());
-            }
-            //System.out.println("---------Third variant--------");
-            //caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
-            //-----------------------------------------------------
-/*            //Fourth variant
-            for (UserMeal meal : meals){
-                calories = caloriesSumInDay.containsKey(meal.getDateTime().toLocalDate()) ? caloriesSumInDay.get(meal.getDateTime().toLocalDate()) : 0;
-                calories += meal.getCalories();
-                caloriesSumInDay.put(meal.getDateTime().toLocalDate(), calories);
-            }
-            System.out.println("---------Fourth variant--------");
-            caloriesSumInDay.forEach((key, value) -> System.out.println(key + "--" + value));
-            //Fourth = Third
-*/
-            List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
-            for (UserMeal meal : meals) {
-                if(TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
-                    userMealWithExcessList.add(
-                            new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesSumInDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay)
-                    );
-            }
-            return userMealWithExcessList;
+        Map<LocalDate, Integer> caloriesSumInDay = new HashMap<>();
+        for (UserMeal meal : meals)
+            caloriesSumInDay.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
+
+        List<UserMealWithExcess> userMealWithExcessList = new ArrayList<>();
+        for (UserMeal meal : meals) {
+            if (TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                userMealWithExcessList.add(
+                        new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesSumInDay.get(meal.getDateTime().toLocalDate()) > caloriesPerDay)
+                );
         }
-        else {
-            System.err.println("Empty arg input");
-            return null;
-        }
+        return userMealWithExcessList;
         //Time complexity: - O(N + N) = O(N)
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        if(!meals.isEmpty()){
-            Map<LocalDate, Integer> caloriesSumInDay = meals.stream().
-                    collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
+        Map<LocalDate, Integer> caloriesSumInDay = meals.stream().
+                collect(Collectors.groupingBy(userMeal -> userMeal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
 
-            return meals.stream()
-                    .filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
-                    .map(userMeal -> new UserMealWithExcess(userMeal.getDateTime(),userMeal.getDescription(), userMeal.getCalories(), caloriesSumInDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
-                    .collect(Collectors.toList());
-            //Stream filtering uses iteration internally
-            //Time complexity: - O(N + N) = O(N)
-        }
-        else{
-            System.err.println("Empty arg input");
-            return null;
-        }
+        return meals.stream()
+                .filter(userMeal -> TimeUtil.isBetweenHalfOpen(userMeal.getDateTime().toLocalTime(), startTime, endTime))
+                .map(userMeal ->
+                        new UserMealWithExcess(
+                                userMeal.getDateTime(),
+                                userMeal.getDescription(),
+                                userMeal.getCalories(),
+                                caloriesSumInDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
+        //Stream filtering uses iteration internally
+        //Time complexity: - O(N + N) = O(N)
     }
 }
+
