@@ -15,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealRepositoryImpl implements MealRepository {
     private static final Logger log = getLogger(MealRepositoryImpl.class);
     private ConcurrentMap<Integer, Meal> mealsMap = new ConcurrentHashMap<>();
-    private AtomicInteger cnt = new AtomicInteger(0);
+    private AtomicInteger counter = new AtomicInteger(0);
 
     public MealRepositoryImpl() {
         log.debug("Creating meal repository");
@@ -35,8 +35,8 @@ public class MealRepositoryImpl implements MealRepository {
     @Override
     public Meal add(Meal meal) {
         if (meal.getId() == null) {
-            meal.setId(cnt.incrementAndGet());
-            mealsMap.putIfAbsent(cnt.get(), meal);
+            meal.setId(counter.incrementAndGet());
+            mealsMap.putIfAbsent(counter.get(), meal);
         } else {
             mealsMap.computeIfPresent(meal.getId(), (key, value) -> meal);
         }

@@ -50,7 +50,7 @@ public class MealServlet extends HttpServlet {
             case "all":
                 log.debug("servlet get all meal");
             default:
-                req.setAttribute("meals", MealsUtil.filteredByStreams(mealRepository.getAll(), MealsUtil.CALORIES_IN_DAYS));
+                req.setAttribute("meals", MealsUtil.filteredByStreams(mealRepository.getAll(),null, null, MealsUtil.CALORIES_IN_DAYS));
                 req.getRequestDispatcher("/meals.jsp").forward(req, resp);
                 break;
         }
@@ -58,7 +58,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.debug("servlet add action (post method)");
+        log.debug("servlet add/edit action (post method)");
         req.setCharacterEncoding("UTF-8");
         String id = req.getParameter("id");
         Meal meal = new Meal(
