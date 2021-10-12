@@ -41,10 +41,6 @@
         <tr>
             <td colspan="2" align="center">
                 <button type="submit">${param.action == 'add' ? 'Add' : 'Edit'}</button>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/HW01
             </td>
         </tr>
     </table>
