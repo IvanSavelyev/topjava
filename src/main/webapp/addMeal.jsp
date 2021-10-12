@@ -17,7 +17,7 @@
             <th>Date time</th>
             <td>
                 <label>
-                    <input type="datetime-local" name="dateTime" size="45" value="${meal.dateTime}"/>
+                    <input type="datetime-local" name="dateTime" size="45" value="${meal.dateTime}" required/>
                 </label>
             </td>
         </tr>
@@ -25,7 +25,7 @@
             <th>Description</th>
             <td>
                 <label>
-                    <input type="text" name="description" size="45" value="${meal.description}"/>
+                    <input type="text" name="description" size="45" value="${meal.description}" required/>
                 </label>
             </td>
         </tr>
@@ -33,13 +33,16 @@
             <th>Calories</th>
             <td>
                 <label>
-                    <input type="number" name="calories" size="45" value="${meal.calories}"/>
+                    <input type="number" name="calories" size="45" value="${meal.calories}" required>
                 </label>
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="center">
+            <td>
                 <button type="submit">${param.action == 'add' ? 'Add' : 'Edit'}</button>
+            </td>
+            <td>
+                <button type="button" onclick="window.location='http://localhost:8080/topjava/meals'">Cancel</button>
             </td>
         </tr>
     </table>

@@ -8,9 +8,9 @@ public interface MealRepository {
 
     Collection<Meal> getAll();
 
-    Meal edit(Integer id);
+    Meal get(int id);
 
     Meal add(Meal meal);
 
-    void delete(Integer id);
+    void delete(int id);
 }

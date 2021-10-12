@@ -2,8 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.repo.InMemoryMealRepository;
 import ru.javawebinar.topjava.model.repo.MealRepository;
-import ru.javawebinar.topjava.model.repo.impl.MealRepositoryImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -25,7 +25,7 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         log.debug("init servlet fields");
-        mealRepository = new MealRepositoryImpl();
+        mealRepository = new InMemoryMealRepository();
     }
 
     @Override
@@ -39,17 +39,16 @@ public class MealServlet extends HttpServlet {
                 resp.sendRedirect("meals");
                 break;
             case "add":
-                log.debug("servlet forward to addMeal form");
-                req.getRequestDispatcher("/addMeal.jsp").forward(req, resp);
             case "edit":
                 log.debug("servlet forward to addMeal form");
-                req.setAttribute("meal", mealRepository.edit(Integer.parseInt(req.getParameter("id"))));
+                if (action.equals("edit"))
+                    req.setAttribute("meal", mealRepository.get(Integer.parseInt(req.getParameter("id"))));
                 req.getRequestDispatcher("/addMeal.jsp").forward(req, resp);
                 break;
             case "all":
                 log.debug("servlet get all meal");
             default:
-                req.setAttribute("meals", MealsUtil.filteredByStreams(mealRepository.getAll(),null, null, MealsUtil.CALORIES_IN_DAYS));
+                req.setAttribute("meals", MealsUtil.getAllTosWithDefaultCaloriesPerDay(mealRepository.getAll(), MealsUtil.CALORIES_IN_DAYS));
                 req.getRequestDispatcher("/meals.jsp").forward(req, resp);
                 break;
         }
