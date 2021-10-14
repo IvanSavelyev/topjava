@@ -12,8 +12,8 @@ public class SecurityUtil {
     public static int ID;
 
     public SecurityUtil() {
-        log.debug("Creating authUser equals 1");
-        SecurityUtil.setAuthUserId(1);
+        //log.debug("Creating authUser equals 1");
+        //SecurityUtil.setAuthUserId(0);
     }
 
     public static int authUserId() {

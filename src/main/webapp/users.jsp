@@ -20,7 +20,6 @@
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
-            <th>Role</th>
             <th colspan="2">Action</th>
         </tr>
         </thead>
@@ -30,7 +29,6 @@
                 <td>${user.id}</td>
                 <td><a href="users?action=select&id=${user.id}">${user.name}</a></td>
                 <td>${user.email}</td>
-                <td></td>
                 <td><a href="users?action=delete&id=${user.id}">Delete</a> | <a href="users?action=update&id=${user.id}">Update</a></td>
             </tr>
         </c:forEach>

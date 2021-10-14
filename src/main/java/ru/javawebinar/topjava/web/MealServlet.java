@@ -2,28 +2,42 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-    private MealRepository repository;
+    private ConfigurableApplicationContext applicationContext;
+    private MealRestController mealRestController;
 
     @Override
     public void init() {
-        repository = new InMemoryMealRepository();
+        //repository = new InMemoryMealRepository();
+        applicationContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = applicationContext.getBean(MealRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        applicationContext.close();
     }
 
     @Override
@@ -39,7 +53,7 @@ public class MealServlet extends HttpServlet {
         );
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        repository.save(meal, SecurityUtil.authUserId());
+        mealRestController.create(meal);
         response.sendRedirect("meals");
     }
 
@@ -51,18 +65,51 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                repository.delete(getId(request), SecurityUtil.authUserId());
+                mealRestController.delete(id);
                 response.sendRedirect("meals");
                 break;
+            case "filter":
+                String startDate = request.getParameter("startDate");
+                String stopDate = request.getParameter("stopDate");
+                String startTime = request.getParameter("startTime");
+                String stopTime = request.getParameter("stopTime");
+                List<MealTo> getFileteredList;
+                if ((!startDate.equals("") && !stopDate.equals("")) && (startTime.equals("") || stopTime.equals(""))) {
+                    getFileteredList = MealsUtil.filterByPredicate(
+                            mealRestController.getAll(),
+                            SecurityUtil.authUserCaloriesPerDay(),
+                            meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), LocalDate.parse(startDate).atTime(LocalTime.MIN), LocalDate.parse(stopDate).atTime(LocalTime.MAX)));
+                    request.setAttribute("meals", getFileteredList);
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                } else if (!startTime.equals("") && !stopTime.equals("") && (startDate.equals("") || stopDate.equals(""))) {
+                    getFileteredList = MealsUtil.filterByPredicate(
+                            mealRestController.getAll(),
+                            SecurityUtil.authUserCaloriesPerDay(),
+                            meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(), LocalTime.parse(startTime), LocalTime.parse(stopTime).plusNanos(1)));
+                    request.setAttribute("meals", getFileteredList);
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                } else if (startDate.equals("") && stopDate.equals("") && startTime.equals("") && stopTime.equals("") || (LocalTime.parse(startTime).isAfter(LocalTime.parse(stopTime))) || LocalDate.parse(stopDate).isAfter(LocalDate.parse(startDate))){
+                    request.setAttribute("meals",
+                            MealsUtil.getTos(mealRestController.getAll(), SecurityUtil.authUserCaloriesPerDay()));
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                } else {
+                    getFileteredList = MealsUtil.filterByPredicate(
+                            mealRestController.getAll(),
+                            SecurityUtil.authUserCaloriesPerDay(),
+                            meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), LocalDate.parse(startDate).atTime(LocalTime.parse(startTime)), LocalDate.parse(stopDate).atTime(LocalTime.parse(stopTime).plusNanos(1))));
+                    request.setAttribute("meals", getFileteredList);
+                    request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                }
+                break;
+
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
-                        new Meal(
-                                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        repository.get(getId(request), SecurityUtil.authUserId());
-                if(meal == null)
+                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                        mealRestController.get(getId(request));
+                if (meal == null)
                     response.sendRedirect("meals");
-                else{
+                else {
                     request.setAttribute("meal", meal);
                     request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 }
@@ -71,7 +118,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getTos(repository.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay()));
+                        MealsUtil.getTos(mealRestController.getAll(), SecurityUtil.authUserCaloriesPerDay()));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

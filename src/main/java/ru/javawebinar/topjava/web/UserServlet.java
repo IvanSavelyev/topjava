@@ -27,7 +27,7 @@ public class UserServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         repository = new InMemoryUserRepository();
-        SecurityUtil.setAuthUserId(UserUtil.USER);
+        SecurityUtil.setAuthUserId(1);
     }
 
     @Override
@@ -44,8 +44,7 @@ public class UserServlet extends HttpServlet {
                 break;
             case "create":
             case "update":
-                if ("update".equals(action))
-                    request.setAttribute("user", repository.get(getId(request)));
+                request.setAttribute("user", "update".equals(action) ? repository.get(getId(request)) : new User());
                 request.getRequestDispatcher("/userForm.jsp").forward(request, response);
                 break;
             case "select":
