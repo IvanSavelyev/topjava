@@ -29,7 +29,6 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() {
-        //repository = new InMemoryMealRepository();
         applicationContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealRestController = applicationContext.getBean(MealRestController.class);
     }
