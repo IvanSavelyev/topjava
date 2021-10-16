@@ -42,16 +42,14 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")),
                 SecurityUtil.authUserId()
         );
-
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        if(meal.isNew())
+        if (meal.isNew())
             mealRestController.create(meal);
         else
             mealRestController.update(meal, meal.getId());
@@ -76,19 +74,14 @@ public class MealServlet extends HttpServlet {
                         SecurityUtil.authUserCaloriesPerDay(),
                         timeFilter));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
-
                 break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
                         mealRestController.get(getId(request));
-                if (meal == null)
-                    response.sendRedirect("meals");
-                else {
-                    request.setAttribute("meal", meal);
-                    request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
-                }
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "all":
             default:
@@ -98,7 +91,6 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
-
     }
 
     private int getId(HttpServletRequest request) {

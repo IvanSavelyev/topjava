@@ -8,7 +8,6 @@ public abstract class AbstractBaseEntity {
     }
 
     public AbstractBaseEntity() {
-
     }
 
     public void setId(Integer id) {

@@ -2,29 +2,22 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository;
-
-import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
+import ru.javawebinar.topjava.util.UserUtil;
 
 public class SecurityUtil {
     private static final Logger log = LoggerFactory.getLogger(SecurityUtil.class);
 
-    public static int ID;
-
-    public SecurityUtil() {
-        //log.debug("Creating authUser equals 1");
-        //SecurityUtil.setAuthUserId(0);
-    }
+    public static int id;
 
     public static int authUserId() {
-        return ID;
+        return id;
     }
 
     public static int authUserCaloriesPerDay() {
-        return DEFAULT_CALORIES_PER_DAY;
+        return UserUtil.DEFAULT_CALORIES_PER_DAY;
     }
 
     public static void setAuthUserId(int userId) {
-        ID = userId;
+        id = userId;
     }
 }
