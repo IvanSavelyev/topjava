@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.UserUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,13 +65,23 @@ public class InMemoryMealRepository implements MealRepository {
 
     public <T> List<Meal> getInTime(int userId, T start, T end) {
         log.info("Get meals with userId {} from {} to {}", userId, start, end);
-        List<Meal> mealList = new ArrayList<>();
-        Object object = start.getClass().getName();
-        object = end.getClass();
-        if(start.getClass().getName().equals(LocalDate.class.getName()) && end.getClass().getName().equals(LocalDate.class.getName()))
-            return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), (LocalDate)start, (LocalDate)end));
-        else
-            return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), (LocalTime)start, (LocalTime)end));
+
+        if (start instanceof LocalDate && end instanceof LocalDate) {
+            LocalDateTime startLocalDateTime = ((LocalDate) start).atStartOfDay();
+            LocalDateTime endLocalDateTime = ((LocalDate) end).atTime(LocalTime.MAX);
+            return getByPredicate(userId,
+                    meal -> DateTimeUtil.isBetweenHalfOpen(
+                            meal.getDateTime(),
+                            startLocalDateTime,
+                            endLocalDateTime));
+        } else if (start instanceof LocalTime && end instanceof LocalTime) {
+            return getByPredicate(userId,
+                    meal -> DateTimeUtil.isBetweenHalfOpen(
+                            meal.getDateTime().toLocalTime(),
+                            (LocalTime) start,
+                            (LocalTime) end));
+        } else
+            return getByPredicate(userId, meal -> true);
     }
 
     private List<Meal> getByPredicate(int userId, Predicate<Meal> filter) {

@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.util.DateTimeUtil;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
@@ -19,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -95,35 +92,5 @@ public class MealServlet extends HttpServlet {
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
-    }
-
-    private Predicate<Meal> getFilterState(HttpServletRequest request) {
-        String startDate = request.getParameter("startDate");
-        String stopDate = request.getParameter("stopDate");
-        String startTime = request.getParameter("startTime");
-        String stopTime = request.getParameter("stopTime");
-        if ((!startDate.equals("") && !stopDate.equals("")) && (startTime.equals("") && stopTime.equals(""))) {
-            return meal -> DateTimeUtil.isBetweenHalfOpen(
-                    meal.getDateTime(),
-                    LocalDate.parse(startDate).atTime(LocalTime.MIN),
-                    LocalDate.parse(stopDate).atTime(LocalTime.MAX));
-        } else if (!startDate.equals("") && !stopDate.equals("") && !startTime.equals("") && !stopTime.equals("")) {
-            return meal -> DateTimeUtil.isBetweenHalfOpen(
-                    meal.getDateTime(),
-                    LocalDate.parse(startDate).atTime(LocalTime.parse(startTime)),
-                    LocalDate.parse(stopDate).atTime(LocalTime.parse(stopTime).plusNanos(1)));
-        } else if ((startDate.equals("") && stopDate.equals("")) && (!startTime.equals("") && !stopTime.equals(""))) {
-            return meal -> DateTimeUtil.isBetweenHalfOpen(
-                    meal.getTime(),
-                    LocalTime.parse(startTime),
-                    LocalTime.parse(stopTime).plusNanos(1));
-        } else if ((!startDate.equals("") || !stopDate.equals("")) && ((!startTime.equals("") && !stopTime.equals("")))) {
-            return meal -> DateTimeUtil.isBetweenHalfOpen(
-                    meal.getDateTime(),
-                    LocalDate.parse(!startDate.equals("") ? startDate : stopDate).atTime(LocalTime.parse(startTime)),
-                    LocalDate.parse(startDate).atTime(LocalTime.parse(stopTime)));
-        } else {
-            return meal -> true;
-        }
     }
 }

@@ -10,12 +10,8 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
@@ -26,12 +22,12 @@ public class MealRestController {
 
     private final MealService service;
 
-    public MealRestController(MealService service){
+    public MealRestController(MealService service) {
         log.info("Creating MealRestController with {}", service);
         this.service = service;
     }
 
-    public Meal get(int id){
+    public Meal get(int id) {
         log.info("Get meal id {} for auth user {}", id, SecurityUtil.authUserId());
         return service.get(id, SecurityUtil.authUserId());
     }
@@ -43,7 +39,7 @@ public class MealRestController {
 
     public Collection<MealTo> getAll() {
         log.info("Get all meals for auth user {}", SecurityUtil.authUserId());
-        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()),  SecurityUtil.authUserCaloriesPerDay());
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public Meal create(Meal meal) {
@@ -58,10 +54,11 @@ public class MealRestController {
         service.update(meal, SecurityUtil.authUserId());
     }
 
-    public Collection<MealTo> getMealsInTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
+    public Collection<MealTo> getMealsInTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("Get meals with userId {} from date {} to {} and time from {} to {}", SecurityUtil.authUserId(), startDate, endDate, startTime, endTime);
-        List<Meal> mealsFilerByDate = (List<Meal>) service.getMealsInTime(SecurityUtil.authUserId(), startDate, endDate);
-        List<Meal> mealsFilerByTime = (List<Meal>) service.getMealsInTime(SecurityUtil.authUserId(), startTime, endTime);
-        return MealsUtil.getTos(Stream.concat(mealsFilerByDate.stream(), mealsFilerByTime.stream()).distinct().collect(Collectors.toList()), SecurityUtil.authUserCaloriesPerDay());
+        Collection<Meal> mealsFilerByDate = service.getMealsInTime(SecurityUtil.authUserId(), startDate, endDate);
+        Collection<Meal> mealsFilerByTime = service.getMealsInTime(SecurityUtil.authUserId(), startTime, endTime);
+        mealsFilerByDate.retainAll(mealsFilerByTime);
+        return MealsUtil.getTos(mealsFilerByDate, SecurityUtil.authUserCaloriesPerDay());
     }
 }

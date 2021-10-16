@@ -5,11 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.function.Predicate;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
@@ -19,8 +16,7 @@ public class MealService {
 
     private final MealRepository repository;
 
-    public MealService(MealRepository repository)
-    {
+    public MealService(MealRepository repository) {
         log.info("Init MealService with repository {}", repository);
         this.repository = repository;
     }
@@ -50,7 +46,7 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public <T> Collection<Meal> getMealsInTime(int userId, T start, T end){
+    public <T> Collection<Meal> getMealsInTime(int userId, T start, T end) {
         log.info("Get meals with userId {} from {} to {}", userId, start, end);
         return repository.getInTime(userId, start, end);
     }
