@@ -65,9 +65,10 @@ public class InMemoryMealRepository implements MealRepository {
     public <T> List<Meal> getInTime(int userId, T start, T end) {
         log.info("Get meals with userId {} from {} to {}", userId, start, end);
         List<Meal> mealList = new ArrayList<>();
-        if(start.getClass().isInstance(LocalDate.class) && end.getClass().isInstance(LocalDate.class))
-            mealList = getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), (LocalDate)start, (LocalDate)end));
-
+        Object object = start.getClass().getName();
+        object = end.getClass();
+        if(start.getClass().getName().equals(LocalDate.class.getName()) && end.getClass().getName().equals(LocalDate.class.getName()))
+            return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), (LocalDate)start, (LocalDate)end));
         else
             return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), (LocalTime)start, (LocalTime)end));
     }

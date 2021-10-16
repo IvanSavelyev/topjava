@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
@@ -56,10 +58,10 @@ public class MealRestController {
         service.update(meal, SecurityUtil.authUserId());
     }
 
-    public Collection<MealTo> getMealsInTime(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
-        log.info("Get meals with userId {} from date {} to {} and time from {} to {}", userId, startDate, endDate, startTime, endTime);
-        List<Meal> mealsFilerByDate = (List<Meal>) service.getMealsInTime(userId, startDate, endDate);
-        List<Meal> mealsFilerByTime = (List<Meal>) service.getMealsInTime(userId, startDate, endDate);
-        return service.getMealsInTime(userId, start, end);
+    public Collection<MealTo> getMealsInTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime){
+        log.info("Get meals with userId {} from date {} to {} and time from {} to {}", SecurityUtil.authUserId(), startDate, endDate, startTime, endTime);
+        List<Meal> mealsFilerByDate = (List<Meal>) service.getMealsInTime(SecurityUtil.authUserId(), startDate, endDate);
+        List<Meal> mealsFilerByTime = (List<Meal>) service.getMealsInTime(SecurityUtil.authUserId(), startTime, endTime);
+        return MealsUtil.getTos(Stream.concat(mealsFilerByDate.stream(), mealsFilerByTime.stream()).distinct().collect(Collectors.toList()), SecurityUtil.authUserCaloriesPerDay());
     }
 }

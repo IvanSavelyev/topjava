@@ -72,16 +72,9 @@ public class MealServlet extends HttpServlet {
                 String stopDate = request.getParameter("stopDate");
                 String startTime = request.getParameter("startTime");
                 String stopTime = request.getParameter("stopTime");
-                //request.setAttribute("meals", mealRestController.getMealsInTime());
-                /*
-                Predicate<Meal> timeFilter = getFilterState(request);
-                request.setAttribute("meals", MealsUtil.filterByPredicate(
-                        mealRestController.getAll(),
-                        SecurityUtil.authUserCaloriesPerDay(),
-                        timeFilter));
+                request.setAttribute("meals", mealRestController.getMealsInTime(LocalDate.parse(startDate), LocalDate.parse(stopDate), LocalTime.parse(startTime), LocalTime.parse(stopTime)));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
-                 */
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
