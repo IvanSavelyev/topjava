@@ -38,8 +38,4 @@ public class MealService {
     public void update(Meal meal, int userId) {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
-
-   // public <T extends Comparable<? super T>> Collection<Meal> getAllBy(T start, T stop, int userId, int caloriesPerDay ) {
-   //     return repository.getFilterBy(start, stop, userId, caloriesPerDay);
-   // }
 }
