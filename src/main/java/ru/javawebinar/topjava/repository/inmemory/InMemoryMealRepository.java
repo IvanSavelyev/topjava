@@ -3,14 +3,14 @@ package ru.javawebinar.topjava.repository.inmemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.UserUtil;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,22 +58,22 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Collection<Meal> getAll(int userId) {
-        log.info("get meal with userId {}", userId);
-        /*return userMealsMap.get(userId).values().stream()
-                .filter(meal -> meal.getUserId().equals(userId))
-                .sorted(Comparator.comparing(Meal::getDateTime, Comparator.nullsLast(Comparator.reverseOrder())))
-                .collect(Collectors.toList());
-
-         */
+        log.info("Get all meals with userId {}", userId);
         return getByPredicate(userId, meal -> true);
     }
 
-    @Override
-    public List<Meal> getInTime(int userId, LocalDateTime start, LocalDateTime end) {
-        return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), start, end));
+    public <T> List<Meal> getInTime(int userId, T start, T end) {
+        log.info("Get meals with userId {} from {} to {}", userId, start, end);
+        List<Meal> mealList = new ArrayList<>();
+        if(start.getClass().isInstance(LocalDate.class) && end.getClass().isInstance(LocalDate.class))
+            mealList = getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalDate(), (LocalDate)start, (LocalDate)end));
+
+        else
+            return getByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), (LocalTime)start, (LocalTime)end));
     }
 
     private List<Meal> getByPredicate(int userId, Predicate<Meal> filter) {
+        log.info("Get meals with userId {} with condition {}", userId, filter);
         return userMealsMap.get(userId).isEmpty() ? new ArrayList<>() :
                 userMealsMap.get(userId).values().stream()
                         .filter(filter)

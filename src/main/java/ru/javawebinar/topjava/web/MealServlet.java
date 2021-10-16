@@ -68,6 +68,12 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case "filter":
+                String startDate = request.getParameter("startDate");
+                String stopDate = request.getParameter("stopDate");
+                String startTime = request.getParameter("startTime");
+                String stopTime = request.getParameter("stopTime");
+                //request.setAttribute("meals", mealRestController.getMealsInTime());
+                /*
                 Predicate<Meal> timeFilter = getFilterState(request);
                 request.setAttribute("meals", MealsUtil.filterByPredicate(
                         mealRestController.getAll(),
@@ -75,6 +81,7 @@ public class MealServlet extends HttpServlet {
                         timeFilter));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
+                 */
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
@@ -86,8 +93,7 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals",
-                        MealsUtil.getTos(mealRestController.getAll(), SecurityUtil.authUserCaloriesPerDay()));
+                request.setAttribute("meals", mealRestController.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

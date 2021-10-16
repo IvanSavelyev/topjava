@@ -23,8 +23,8 @@ public class SpringMain {
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            Collection<Meal> mealToList = mealRestController.getAll();
-            mealToList.forEach(System.out::println);
+            //Collection<Meal> mealToList = mealRestController.getAll();
+            //mealToList.forEach(System.out::println);
         }
     }
 }

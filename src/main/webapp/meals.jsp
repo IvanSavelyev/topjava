@@ -31,13 +31,13 @@
             </tr>
             <tr>
                 <th>Date:</th>
-                <th><input type="date" name="startDate" value="${param.startDate}" ></th>
-                <th><input type="date" name="stopDate" value="${param.stopDate}" ></th>
+                <th><input type="date" name="startDate" value="${param.startDate}" required></th>
+                <th><input type="date" name="stopDate" value="${param.stopDate}" required></th>
             </tr>
             <tr>
                 <th>Time:</th>
-                <th align="left"><input type="time" name="startTime" value="${param.startTime}" ></th>
-                <th align="left"><input type="time" name="stopTime" value="${param.stopTime}" ></th>
+                <th align="left"><input type="time" name="startTime" value="${param.startTime}" required></th>
+                <th align="left"><input type="time" name="stopTime" value="${param.stopTime}" required></th>
             </tr>
         </table>
         <button type="submit">Filter</button>
