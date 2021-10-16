@@ -7,9 +7,10 @@ import ru.javawebinar.topjava.util.UserUtil;
 public class SecurityUtil {
     private static final Logger log = LoggerFactory.getLogger(SecurityUtil.class);
 
-    public static int id;
+    private static int id = 1;
 
     public static int authUserId() {
+        log.info("Current auth user id {}", id);
         return id;
     }
 

@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.util.UserUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,12 +16,14 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        SecurityUtil.setAuthUserId(UserUtil.USER_ID);
+        log.info("User servlet initialisation");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        SecurityUtil.setAuthUserId(Integer.parseInt(request.getParameter("userId")));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        log.info("Setting user {}", userId);
+        SecurityUtil.setAuthUserId(userId);
         response.sendRedirect("meals");
     }
 

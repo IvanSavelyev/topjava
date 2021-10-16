@@ -11,14 +11,14 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
+import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
 public class MealRestController {
-    protected final Logger log = LoggerFactory.getLogger(MealRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
 
     private final MealService service;
 
@@ -37,7 +37,7 @@ public class MealRestController {
         service.delete(id, SecurityUtil.authUserId());
     }
 
-    public Collection<MealTo> getAll() {
+    public List<MealTo> getAll() {
         log.info("Get all meals for auth user {}", SecurityUtil.authUserId());
         return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
@@ -54,11 +54,13 @@ public class MealRestController {
         service.update(meal, SecurityUtil.authUserId());
     }
 
-    public Collection<MealTo> getMealsInTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public List<MealTo> getMealsInTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        startDate = startDate == null ? LocalDate.MIN : startDate;
+        endDate = endDate == null ? LocalDate.MAX : endDate;
+        startTime = startTime == null ? LocalTime.MIN : startTime;
+        endTime = endTime == null ? LocalTime.MAX : endTime;
         log.info("Get meals with userId {} from date {} to {} and time from {} to {}", SecurityUtil.authUserId(), startDate, endDate, startTime, endTime);
-        Collection<Meal> mealsFilerByDate = service.getMealsInTime(SecurityUtil.authUserId(), startDate, endDate);
-        Collection<Meal> mealsFilerByTime = service.getMealsInTime(SecurityUtil.authUserId(), startTime, endTime);
-        mealsFilerByDate.retainAll(mealsFilerByTime);
-        return MealsUtil.getTos(mealsFilerByDate, SecurityUtil.authUserCaloriesPerDay());
+        List<Meal> allMealsInDate = service.getInDate(SecurityUtil.authUserId(), startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
+        return MealsUtil.getFilteredTos(allMealsInDate, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 }
