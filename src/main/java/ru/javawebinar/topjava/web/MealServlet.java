@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -64,12 +65,16 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case "filter":
+                String startDate = StringUtils.isEmpty(request.getParameter("startDate")) ? "" : request.getParameter("startDate");
+                String stopDate = StringUtils.isEmpty(request.getParameter("stopDate")) ? "" : request.getParameter("stopDate");
+                String startTime = StringUtils.isEmpty(request.getParameter("startTime")) ? "" : request.getParameter("startTime");
+                String stopTime = StringUtils.isEmpty(request.getParameter("stopTime")) ? "" : request.getParameter("stopTime");
                 request.setAttribute("meals", mealRestController.getMealsInTime(
-                        DateTimeUtil.parseDate(request.getParameter("startDate")),
-                        DateTimeUtil.parseDate(request.getParameter("stopDate")),
-                        DateTimeUtil.parseTime(request.getParameter("startTime")),
-                        DateTimeUtil.parseTime(request.getParameter("stopTime")))
-                );
+                        DateTimeUtil.parseDate(startDate),
+                        DateTimeUtil.parseDate(stopDate),
+                        DateTimeUtil.parseTime(startTime),
+                        DateTimeUtil.parseTime(stopTime)
+                ));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "create":

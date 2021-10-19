@@ -17,7 +17,5 @@ public interface MealRepository {
 
     List<Meal> getAll(int userId);
 
-    List<Meal> getByPredicate(int userId, Predicate<Meal> filter);
-
     List<Meal> getInDate(int userId, LocalDateTime startDate, LocalDateTime stopDate);
 }

@@ -14,6 +14,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
     private final UserRepository repository;
 
     public UserService(UserRepository repository) {

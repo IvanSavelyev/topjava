@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryMealRepository implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepository.class);
+
     private Map<Integer, Map<Integer, Meal>> usersMealsMap = new ConcurrentHashMap<>();
+
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -64,10 +66,9 @@ public class InMemoryMealRepository implements MealRepository {
         return getByPredicate(userId, meal -> true);
     }
 
-    @Override
     public List<Meal> getByPredicate(int userId, Predicate<Meal> filter) {
         log.info("Get meals with userId {} with condition {}", userId, filter);
-        Map<Integer, Meal> userMealMap = usersMealsMap.get(userId);
+        Map<Integer, Meal> userMealMap = usersMealsMap.computeIfAbsent(userId, key -> new ConcurrentHashMap<>());
         if (!userMealMap.isEmpty()) {
             return userMealMap.values().stream()
                     .filter(filter)
