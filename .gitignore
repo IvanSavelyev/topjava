@@ -4,7 +4,4 @@ target
 *.iml
 log
 *.patch
-db
-*.properties
-
 
