@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
@@ -28,6 +29,8 @@ public class MealTestData {
     public static final Meal ADMIN_MEAL_5 = new Meal(MEAL_ADMIN_ID + 4, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 1), "Админ Обед", 510);
     public static final Meal ADMIN_MEAL_6 = new Meal(MEAL_ADMIN_ID + 5, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 1), "Админ Ужин", 1500);
 
+    public static final List<Meal> MEALS = Arrays.asList(MEAL_6, MEAL_5, MEAL_4, MEAL_3, MEAL_2, MEAL_1);
+
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).isEqualTo(expected);
     }
@@ -40,7 +43,11 @@ public class MealTestData {
         assertThat(actual).isEqualTo(expected);
     }
 
-    public static Meal getNewMeal(){
+    public static Meal getNew(){
         return new Meal(null, LocalDateTime.of(2020, Month.APRIL,1, 10, 10, 10), "Created meal", 1000);
+    }
+
+    public static Meal getUpdate(){
+        return new Meal(MEAL_USER_ID, MEAL_1.getDateTime(), "Updated meal", 1000);
     }
 }
