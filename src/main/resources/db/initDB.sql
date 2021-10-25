@@ -6,7 +6,6 @@ DROP SEQUENCE IF EXISTS global_seq;
 DROP INDEX IF EXISTS users_unique_email_idx;
 DROP INDEX IF EXISTS meals_datetime_unique_idx;
 
-
 CREATE SEQUENCE global_seq START WITH 100000;
 
 CREATE TABLE users
