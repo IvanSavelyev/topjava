@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -33,6 +34,11 @@ public class MealServiceTest {
         // Only for postgres driver logging
         // It uses java.util.logging and logged via jul-to-slf4j bridge
         SLF4JBridgeHandler.install();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        SLF4JBridgeHandler.uninstall();
     }
 
     @Autowired
@@ -77,7 +83,6 @@ public class MealServiceTest {
     @Test
     public void getAnother() throws Exception {
         assertThrows(NotFoundException.class, () -> service.get(MEAL_USER_ID, ADMIN_ID));
-
     }
 
     @Test

@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -31,6 +33,11 @@ public class UserServiceTest {
         // Only for postgres driver logging
         // It uses java.util.logging and logged via jul-to-slf4j bridge
         SLF4JBridgeHandler.install();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        SLF4JBridgeHandler.uninstall();
     }
 
     @Autowired
