@@ -41,17 +41,17 @@ public class MealServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(MEAL_USER_ID, USER_ID);
-        assertMatch(service.getAll(USER_ID), MEAL_6, MEAL_5, MEAL_4, MEAL_3, MEAL_2);
+        assertMatch(service.getAll(USER_ID), meal_6, meal_5, meal_4, meal_3, meal_2);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteNotFound() throws Exception {
-        service.delete(0, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.delete(0, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void deleteAnother() throws Exception {
-        service.delete(MEAL_USER_ID, ADMIN_ID);
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL_USER_ID, ADMIN_ID));
     }
 
     @Test
@@ -60,23 +60,24 @@ public class MealServiceTest {
         Meal createFromService = service.create(newMeal, USER_ID);
         newMeal.setId(createFromService.getId());
         assertMatch(newMeal, createFromService);
-        assertMatch(service.getAll(USER_ID), createFromService, MEAL_6, MEAL_5, MEAL_4, MEAL_3, MEAL_2, MEAL_1);
+        assertMatch(service.getAll(USER_ID), createFromService, meal_6, meal_5, meal_4, meal_3, meal_2, meal_1);
     }
 
     @Test
     public void get() throws Exception {
         Meal actual = service.get(MEAL_USER_ID, USER_ID);
-        assertMatch(actual, MEAL_1);
+        assertMatch(actual, meal_1);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getNotFound() throws Exception {
-        service.get(0, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(0, USER_ID));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void getAnother() throws Exception {
-        service.get(MEAL_USER_ID, ADMIN_ID);
+        assertThrows(NotFoundException.class, () -> service.get(MEAL_USER_ID, ADMIN_ID));
+
     }
 
     @Test
@@ -88,7 +89,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void updateNotFound() throws Exception {
-        service.update(MEAL_1, ADMIN_ID);
+        service.update(meal_1, ADMIN_ID);
     }
 
     @Test
@@ -100,12 +101,12 @@ public class MealServiceTest {
     public void getBetween() throws Exception {
         assertMatch(service.getBetweenInclusive(
                 LocalDate.of(2020, Month.JANUARY, 30),
-                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), MEAL_3, MEAL_2, MEAL_1);
+                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), meal_3, meal_2, meal_1);
     }
 
     @Test
     public void duplicateDateTimeCreate() throws Exception {
-        Meal duple = getNew();
+        Meal duple = MealTestData.getNew();
         duple.setDateTime(service.get(MEAL_USER_ID, USER_ID).getDateTime());
         assertThrows(DataAccessException.class, () ->
                 service.create(duple, USER_ID));
