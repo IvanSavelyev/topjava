@@ -34,7 +34,17 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    public Meal executeSaveOperation(Meal meal, MapSqlParameterSource map) {
+    abstract public T convertTimeType(LocalDateTime localDateTime);
+
+    @Override
+    public Meal save(Meal meal, int userId) {
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", meal.getId())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories())
+                .addValue("date_time", convertTimeType(meal.getDateTime()))
+                .addValue("user_id", userId);
+
         if (meal.isNew()) {
             Number newId = insertMeal.executeAndReturnKey(map);
             meal.setId(newId.intValue());
@@ -48,10 +58,6 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
         }
         return meal;
     }
-
-    abstract public T convertTimeType(LocalDateTime localDateTime);
-
-
 
     @Override
     public boolean delete(int id, int userId) {
@@ -69,5 +75,12 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     public List<Meal> getAll(int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
+    }
+
+    @Override
+    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
+                ROW_MAPPER, userId, convertTimeType(startDateTime), convertTimeType(endDateTime));
     }
 }
