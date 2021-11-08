@@ -11,9 +11,10 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public abstract class AbstractJdbcMealRepository implements MealRepository {
+public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
 
     protected static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -47,6 +48,8 @@ public abstract class AbstractJdbcMealRepository implements MealRepository {
         }
         return meal;
     }
+
+    abstract public T convertTimeType(LocalDateTime localDateTime);
 
     @Override
     public boolean delete(int id, int userId) {

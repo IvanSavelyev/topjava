@@ -14,11 +14,17 @@ import java.util.List;
 
 @Repository
 @Profile(Profiles.HSQL_DB)
-public class JdbcMealRepositoryHsqldb extends AbstractJdbcMealRepository {
+public class HsqldbJdbcMealRepository extends AbstractJdbcMealRepository<Timestamp> {
 
-    public JdbcMealRepositoryHsqldb(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public HsqldbJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
+
+    @Override
+    public Timestamp convertTimeType(LocalDateTime localDateTime) {
+        return Timestamp.valueOf(localDateTime);
+    }
+
 
     @Override
     public Meal save(Meal meal, int userId) {
@@ -26,7 +32,7 @@ public class JdbcMealRepositoryHsqldb extends AbstractJdbcMealRepository {
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", Timestamp.valueOf(meal.getDateTime()))
+                .addValue("date_time", convertTimeType(meal.getDateTime()))
                 .addValue("user_id", userId);
 
         return executeSaveOperation(meal, map);
@@ -36,6 +42,6 @@ public class JdbcMealRepositoryHsqldb extends AbstractJdbcMealRepository {
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, Timestamp.valueOf(startDateTime), Timestamp.valueOf(endDateTime));
+                ROW_MAPPER, userId, convertTimeType(startDateTime), convertTimeType(endDateTime));
     }
 }
