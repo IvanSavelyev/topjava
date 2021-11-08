@@ -25,7 +25,6 @@ public class HsqldbJdbcMealRepository extends AbstractJdbcMealRepository<Timesta
         return Timestamp.valueOf(localDateTime);
     }
 
-
     @Override
     public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()

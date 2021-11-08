@@ -51,6 +51,8 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
 
     abstract public T convertTimeType(LocalDateTime localDateTime);
 
+
+
     @Override
     public boolean delete(int id, int userId) {
         return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
