@@ -53,7 +53,6 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        //userId = SecurityUtil.authUserId();
         return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
