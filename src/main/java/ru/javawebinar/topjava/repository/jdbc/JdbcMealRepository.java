@@ -40,14 +40,21 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(meal);
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", meal.getId())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories())
+                .addValue("date_time", meal.getDateTime())
+                .addValue("user_id", userId);
+
         if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(parameterSource);
+            Number newId = insertMeal.executeAndReturnKey(map);
             meal.setId(newId.intValue());
         } else {
-            if (namedParameterJdbcTemplate.update("UPDATE meals " +
-                    "SET description=:description, calories=:calories, date_time=:date_time " +
-                    "WHERE id=:id AND user_id=:user_id", parameterSource) == 0) {
+            if (namedParameterJdbcTemplate.update("" +
+                    "UPDATE meals " +
+                    "   SET description=:description, calories=:calories, date_time=:date_time " +
+                    " WHERE id=:id AND user_id=:user_id", map) == 0) {
                 return null;
             }
         }
@@ -57,7 +64,7 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
         //userId = SecurityUtil.authUserId();
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?",ROW_MAPPER, id, userId) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
     @Override
