@@ -1,10 +1,8 @@
 package ru.javawebinar.topjava.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.UserService;
@@ -15,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class RootController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    private MealService mealService;
+    private final MealService mealService;
 
     public RootController(UserService userService, MealService mealService) {
         this.userService = userService;
@@ -36,26 +34,14 @@ public class RootController {
     }
 
     @GetMapping("/meals")
-    public String getMeals(Model model){
+    public String getMeals(Model model) {
         model.addAttribute("meals",
                 MealsUtil.getTos(mealService.getAll(
-                        SecurityUtil.authUserId()),
+                                SecurityUtil.authUserId()),
                         SecurityUtil.authUserCaloriesPerDay())
         );
         return "meals";
     }
-
-//    @GetMapping("/update/{mealId}")
-//    public String addMeal(@PathVariable String mealId, Model model){
-//        model.addAttribute("meal", mealService.get(Integer.parseInt(mealId), SecurityUtil.authUserId()));
-//        return "mealForm";
-//    }
-
-//    @PostMapping("/create/{mealId}")
-//    public String editMeal(@PathVariable String mealId, Model model){
-//        model.addAttribute("meal", mealService.get(Integer.parseInt(mealId), SecurityUtil.authUserId()));
-//        return "mealForm";
-//    }
 
     @PostMapping("/users")
     public String setUser(HttpServletRequest request) {

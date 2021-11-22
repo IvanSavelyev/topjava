@@ -9,7 +9,7 @@
 <section>
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <h3><spring:message code="${meal.id == null ? 'common.add' : 'common.edit'}" /></h3>
+    <h3><spring:message code="${meal.id == null ? 'common.add' : 'common.edit'}"/></h3>
     <form method="post" action="">
         <dl>
             <dt><spring:message code="meal.date"/>:</dt>
@@ -23,9 +23,10 @@
             <dt><spring:message code="meal.calories"/>:</dt>
             <dd><input type="number" value="${meal.calories}" name="calories" required></dd>
         </dl>
-        <button type="submit"><spring:message code="common.save"/></button>
+        <button type="submit"><spring:message code="${meal.id == null ? 'common.add' : 'common.edit'}"/></button>
         <button onclick="window.history.back()" type="button"><spring:message code="common.cancel"/></button>
     </form>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

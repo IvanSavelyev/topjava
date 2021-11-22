@@ -29,7 +29,7 @@
         <button type="submit"><spring:message code="meal.filter"/></button>
     </form>
     <hr/>
-    <a href="meals/create"><spring:message code="common.add"/></a>
+    <a href="<spring:url value="meals/create"/> "><spring:message code="common.add"/></a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -41,7 +41,7 @@
             <th></th>
         </tr>
         </thead>
-        <c:forEach items="${requestScope.meals}" var="meal">
+        <c:forEach items="${meals}" var="meal">
             <tr data-mealExcess="${meal.excess}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
@@ -51,12 +51,15 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href=" <spring:url value="meals/update?id=${meal.id}"/> "><spring:message code="common.edit"/></a></td>
-                <td><a href=" <spring:url value="meals/delete?id=${meal.id}"/> "><spring:message code="common.delete"/></a></td>
+                <td><a href=" <spring:url value="meals/update?id=${meal.id}"/> "><spring:message
+                        code="common.edit"/></a></td>
+                <td><a href=" <spring:url value="meals/delete?id=${meal.id}"/> "><spring:message
+                        code="common.delete"/></a></td>
             </tr>
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
 

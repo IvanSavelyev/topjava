@@ -7,6 +7,7 @@ import org.junit.rules.Stopwatch;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -29,6 +30,13 @@ public abstract class AbstractServiceTest {
 
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
+
+    @Autowired
+    public Environment env;
+
+    public boolean isJdbc() {
+        return env.acceptsProfiles(Profiles.of(ru.javawebinar.topjava.Profiles.JDBC));
+    }
 
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;

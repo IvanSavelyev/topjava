@@ -1,21 +1,11 @@
 package ru.javawebinar.topjava;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
-import ru.javawebinar.topjava.web.meal.MealController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.Arrays;
-import java.util.List;
 
 public class SpringMain {
     public static void main(String[] args) {
