@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
@@ -26,18 +27,6 @@ public class MealController {
     public MealController(MealService mealService) {
         this.mealService = mealService;
     }
-
-//    public Meal get(int id) {
-//        int userId = SecurityUtil.authUserId();
-//        log.info("get meal {} for user {}", id, userId);
-//        return mealService.get(id, userId);
-//    }
-//
-//    public void delete(int id) {
-//        int userId = SecurityUtil.authUserId();
-//        log.info("delete meal {} for user {}", id, userId);
-//        mealService.delete(id, userId);
-//    }
 
     @GetMapping("/update")
     public String edit(Model model, @RequestParam("id") String mealId) {
@@ -84,4 +73,7 @@ public class MealController {
                         DateTimeUtil.parseLocalTime(startTime), DateTimeUtil.parseLocalTime(endTime)));
         return "meals";
     }
+
+
+
 }

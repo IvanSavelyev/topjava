@@ -1,9 +1,13 @@
 package ru.javawebinar.topjava;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
@@ -18,22 +22,13 @@ public class SpringMain {
         // java 7 automatic resource management (ARM)
         try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
             appCtx.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
-            appCtx.load("spring/spring-app.xml", "spring/spring-db.xml");
+            appCtx.load("spring/spring-app.xml", "spring/inmemory.xml");
             appCtx.refresh();
 
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
             System.out.println();
-
-//            MealController mealController = appCtx.getBean(MealController.class);
-//            List<MealTo> filteredMealsWithExcess =
-//                    mealController.getBetween(
-//                            LocalDate.of(2020, Month.JANUARY, 30), LocalTime.of(7, 0),
-//                            LocalDate.of(2020, Month.JANUARY, 31), LocalTime.of(11, 0));
-//            filteredMealsWithExcess.forEach(System.out::println);
-//            System.out.println();
-//            System.out.println(mealController.getBetween(null, null, null, null));
         }
     }
 }

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -53,7 +54,6 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() {
