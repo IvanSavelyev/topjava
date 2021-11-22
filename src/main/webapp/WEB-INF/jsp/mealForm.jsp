@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"  %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>Meal</title>
@@ -8,12 +8,11 @@
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
+    <h3><a href="index.jsp">Home</a></h3>
     <hr>
-        <h2>${meal.id() == null ? 'Create meal' : 'Edit meal'}</h2>
-
-    <form:form method="post" modelAttribute="newMeal" >
-        <input type="hidden" name="id" value="${meal.id}">
+    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
+    <form method="post" action="">
+<%--        <input type="hidden" name="id" value="${meal.id}">--%>
         <dl>
             <dt>DateTime:</dt>
             <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
@@ -28,7 +27,7 @@
         </dl>
         <button type="submit">Save</button>
         <button onclick="window.history.back()" type="button">Cancel</button>
-    </form:form>
+    </form>
 </section>
 </body>
 </html>

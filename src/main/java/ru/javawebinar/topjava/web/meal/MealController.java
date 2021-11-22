@@ -4,19 +4,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Controller
+@RequestMapping("/meals")
 public class MealController {
     private static final Logger log = LoggerFactory.getLogger(MealController.class);
 
@@ -39,7 +40,7 @@ public class MealController {
 //    }
 
     @GetMapping("/update")
-    public String editMeal(Model model, @RequestParam("id") String mealId) {
+    public String edit(Model model, @RequestParam("id") String mealId) {
         model.addAttribute("meal", mealService.get(Integer.parseInt(mealId), SecurityUtil.authUserId()));
         return "mealForm";
     }
@@ -50,10 +51,26 @@ public class MealController {
         return "redirect:/meals";
     }
 
-    @PostMapping("/update")
-    public String addNewMeal(@ModelAttribute("newMeal") Meal newMeal) {
-        mealService.update(newMeal, SecurityUtil.authUserId());
+    @PostMapping("/create")
+    public String create(@RequestParam("dateTime") String dateTime, @RequestParam("description") String description, @RequestParam("calories") String calories) {
+        Meal meal = new Meal(LocalDateTime.parse(dateTime), description, Integer.parseInt(calories));
+        mealService.create(meal, SecurityUtil.authUserId());
         return "redirect:/meals";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam("dateTime") String dateTime, @RequestParam("description") String description,
+                         @RequestParam("calories") String calories, @RequestParam("id") String mealId) {
+        Meal meal = new Meal(LocalDateTime.parse(dateTime), description, Integer.parseInt(calories));
+        meal.setId(Integer.parseInt(mealId));
+        mealService.update(meal, SecurityUtil.authUserId());
+        return "redirect:/meals";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
+        return "mealForm";
     }
 
     @GetMapping("/filter")
@@ -64,37 +81,7 @@ public class MealController {
                 DateTimeUtil.parseLocalDate(startDate), DateTimeUtil.parseLocalDate(endDate), SecurityUtil.authUserId());
         model.addAttribute("meals",
                 MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(),
-                DateTimeUtil.parseLocalTime(startTime), DateTimeUtil.parseLocalTime(endTime)));
+                        DateTimeUtil.parseLocalTime(startTime), DateTimeUtil.parseLocalTime(endTime)));
         return "meals";
     }
-
-
-//    public Meal create(Meal meal) {
-//        int userId = SecurityUtil.authUserId();
-//        checkNew(meal);
-//        log.info("create {} for user {}", meal, userId);
-//        return mealService.create(meal, userId);
-//    }
-//
-//    public void update(Meal meal, int id) {
-//        int userId = SecurityUtil.authUserId();
-//        assureIdConsistent(meal, id);
-//        log.info("update {} for user {}", meal, userId);
-//        mealService.update(meal, userId);
-//    }
-//
-//    /**
-//     * <ol>Filter separately
-//     * <li>by date</li>
-//     * <li>by time for every date</li>
-//     * </ol>
-//     */
-//    public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-//                                   @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
-//        int userId = SecurityUtil.authUserId();
-//        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
-//
-//        List<Meal> mealsDateFiltered = mealService.getBetweenInclusive(startDate, endDate, userId);
-//        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
-//    }
 }
