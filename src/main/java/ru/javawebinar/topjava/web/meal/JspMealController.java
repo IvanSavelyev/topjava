@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController extends AbstractMealController {
+public class JspMealController extends MealRestController {
     private static final Logger log = LoggerFactory.getLogger(JspMealController.class);
 
     @GetMapping("/update")
