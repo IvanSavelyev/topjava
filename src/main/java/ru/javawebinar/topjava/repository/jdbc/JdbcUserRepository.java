@@ -74,6 +74,11 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
+        List<User> strLst = jdbcTemplate.query("SELECT * FROM users_roles", (rs, rowNum) -> {
+            User user = new User();
+            user.setId(rs.getString("user_id"));
+            user.setRoles(rs.getString("role"));
+        });
+        return null;
     }
 }
