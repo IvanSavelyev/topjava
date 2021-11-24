@@ -64,6 +64,16 @@ public class JdbcUserRepository implements UserRepository {
                 """, parameterSource) == 0) {
                 return null;
             }
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
+            jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)",
+                    user.getRoles(),
+                    user.getRoles().size(), new ParameterizedPreparedStatementSetter<Role>() {
+                        @Override
+                        public void setValues(PreparedStatement ps, Role argument) throws SQLException {
+                            ps.setInt(1, user.getId());
+                            ps.setString(2, argument.name());
+                        }
+                    });
         }
         return user;
     }
