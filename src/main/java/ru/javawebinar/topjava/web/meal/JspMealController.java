@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +16,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController extends MealRestController {
-    private static final Logger log = LoggerFactory.getLogger(JspMealController.class);
+public class JspMealController extends AbstractMealController {
 
     @GetMapping("/update")
     public String edit(Model model, @RequestParam("id") String mealId) {

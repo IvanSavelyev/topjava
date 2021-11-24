@@ -35,6 +35,8 @@
         <hibernate.version>5.6.1.Final</hibernate.version>
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
+        <javax.validation>2.0.1.Final</javax.validation>
+
 
         <!--Cache-->
         <ehcache.version>3.9.7</ehcache.version>
@@ -161,12 +163,18 @@
             <version>${hibernate.version}</version>
         </dependency>
 
+
         <!--http://hibernate.org/validator/documentation/getting-started/#unified-expression-language-el-->
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
             <version>${javax-el.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation}</version>
         </dependency>
 
         <!-- Cache -->
@@ -244,9 +252,6 @@
                     <version>2.6.1</version>
                 </dependency>
             </dependencies>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
 
         <profile>
@@ -270,6 +275,9 @@
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
     </profiles>
 

@@ -1,4 +1,7 @@
 package ru.javawebinar.topjava.web.meal;
 
-public class MealRestController extends AbstractMealController{
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class MealRestController extends AbstractMealController {
 }

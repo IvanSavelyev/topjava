@@ -2,19 +2,17 @@ package ru.javawebinar.topjava.service.datajpa;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractJpaUserServiceTest;
-import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(DATAJPA)
 public class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
@@ -22,13 +20,21 @@ public class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
     @Test
     public void getWithMeals() {
         User user = service.getWithMeals(USER_ID);
+        User admin = service.getWithMeals(ADMIN_ID);
         USER_MATCHER.assertMatch(user, UserTestData.user);
-        MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.meals);
+        MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.userMeals);
+        USER_MATCHER.assertMatch(admin, UserTestData.admin);
+        MEAL_MATCHER.assertMatch(admin.getMeals(), MealTestData.adminMeals);
     }
 
     @Test
     public void getWithMealsNotFound() {
         Assert.assertThrows(NotFoundException.class,
                 () -> service.getWithMeals(1));
+    }
+
+    @Test
+    public void getByNotExistEmail() {
+        assertThrows(NotFoundException.class, () -> service.getByEmail("my@gmail.com"));
     }
 }
