@@ -27,4 +27,6 @@ class JsonUtilTest {
         List<Meal> meals = JsonUtil.readValues(json, Meal.class);
         MEAL_MATCHER.assertMatch(meals, MealTestData.meals);
     }
+
+
 }

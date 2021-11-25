@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Range;
@@ -73,6 +74,7 @@ public class User extends AbstractNamedEntity {
 //    @JsonIgnore
     private List<Meal> meals;
 
+    @JsonCreator
     public User() {
     }
 
