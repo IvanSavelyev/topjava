@@ -1,16 +1,17 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
@@ -22,19 +23,13 @@ public class MealRestController extends AbstractMealController {
 
     static final String REST_URL = "/rest/admin/meals";
 
-    @PostMapping("/create")
-    public Meal create(@RequestBody Meal newMeal) {
-        return super.create(newMeal);
-    }
-
-    @Override
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Meal meal, @PathVariable int id) {
         super.update(meal, id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> createWithLocation(@RequestBody Meal meal) {
         Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -48,23 +43,21 @@ public class MealRestController extends AbstractMealController {
         return super.getAll();
     }
 
-    @Override
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable int id) {
         super.delete(id);
     }
 
-    @Override
     @GetMapping("/{id}")
     public Meal get(@PathVariable int id) {
         return super.get(id);
     }
 
     @GetMapping("/filter")
-    public List<MealTo> filter(@RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate,
-                               @RequestParam(value = "startTime") String startTime, @RequestParam(value = "endTime") String endTime) {
-
-        return super.getBetween(parseLocalDate(startDate), parseLocalTime(startTime), parseLocalDate(endDate), parseLocalTime(endTime));
+    public List<MealTo> filter(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
+                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
+        return super.getBetween(startDateTime.toLocalDate(), startDateTime.toLocalTime(),
+                                endDateTime.toLocalDate(), endDateTime.toLocalTime());
     }
 }
