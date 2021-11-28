@@ -13,8 +13,8 @@ public class ResourceControllerTest extends AbstractControllerTest {
     @Test
     public void testResources() throws Exception {
         perform(get("/resources/css/style.css"))
-        .andDo(print())
-        .andExpect(content().contentType(MediaType.valueOf("text/css; charset=UTF-8")))
-        .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.valueOf("text/css; charset=UTF-8")))
+                .andExpect(status().isOk());
     }
 }
