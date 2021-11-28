@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -75,6 +74,7 @@ public class User extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("dateTime DESC")
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
+    @JsonManagedReference
     private List<Meal> meals;
 
     @JsonCreator
