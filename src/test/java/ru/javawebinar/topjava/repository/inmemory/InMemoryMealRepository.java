@@ -25,10 +25,9 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         var userMeals = new InMemoryBaseRepository<Meal>();
-        MealTestData.mealsUser.forEach(userMeals::put);
+        MealTestData.userMeals.forEach(userMeals::put);
         usersMealsMap.put(UserTestData.USER_ID, userMeals);
     }
-
 
     @Override
     public Meal save(Meal meal, int userId) {

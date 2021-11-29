@@ -88,11 +88,12 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithMeals() throws Exception {
-        Assumptions.assumeFalse(isJpa());
+        Assumptions.assumeFalse(isJpaJdbc());
         perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID + "/with-meals"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(userService.getWithMeals(ADMIN_ID)));
+                .andExpect(USER_MATCHER.contentJson(admin))
+                .andExpect(result -> admin.getMeals());
     }
 }

@@ -8,12 +8,9 @@ import java.util.Locale;
 
 public class LocalDateFormatter implements Formatter<LocalDate> {
 
-    public LocalDateFormatter() {
-    }
-
     @Override
     public String print(LocalDate date, Locale locale) {
-        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return date.format(DateTimeFormatter.ISO_DATE);
     }
 
     @Override
