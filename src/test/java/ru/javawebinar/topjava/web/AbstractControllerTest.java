@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +30,13 @@ public abstract class AbstractControllerTest {
 
     @Autowired
     public ModelMapper modelMapper;
+
+    @Autowired
+    private Environment environment;
+
+    public boolean isJpa() {
+        return environment.acceptsProfiles(org.springframework.core.env.Profiles.of(Profiles.JPA));
+    }
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 

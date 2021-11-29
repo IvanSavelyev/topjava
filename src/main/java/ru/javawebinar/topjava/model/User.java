@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -30,7 +28,6 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 })
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class User extends AbstractNamedEntity {
 
     public static final String DELETE = "User.delete";
@@ -77,7 +74,6 @@ public class User extends AbstractNamedEntity {
     @JsonManagedReference
     private List<Meal> meals;
 
-    @JsonCreator
     public User() {
     }
 
@@ -129,6 +125,14 @@ public class User extends AbstractNamedEntity {
 
     public void setCaloriesPerDay(int caloriesPerDay) {
         this.caloriesPerDay = caloriesPerDay;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 
     public boolean isEnabled() {

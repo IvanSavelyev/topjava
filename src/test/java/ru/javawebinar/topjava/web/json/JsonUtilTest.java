@@ -20,10 +20,10 @@ class JsonUtilTest {
 
     @Test
     void readWriteValues() {
-        String json = JsonUtil.writeValue(meals);
+        String json = JsonUtil.writeValue(mealsUser);
         System.out.println(json);
         List<Meal> meals = JsonUtil.readValues(json, Meal.class);
-        MEAL_MATCHER.assertMatch(meals, MealTestData.meals);
+        MEAL_MATCHER.assertMatch(meals, MealTestData.mealsUser);
     }
 
 

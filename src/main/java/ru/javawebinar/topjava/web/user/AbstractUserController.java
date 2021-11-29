@@ -50,7 +50,7 @@ public abstract class AbstractUserController {
     }
 
     public User getWithMeals(int id) {
-        log.info("get with meals");
+        log.info("get with userId {} meals", id);
         return service.getWithMeals(id);
     }
 }
