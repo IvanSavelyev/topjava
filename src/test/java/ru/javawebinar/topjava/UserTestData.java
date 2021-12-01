@@ -19,6 +19,11 @@ public class UserTestData {
     public static final User user = new User(USER_ID, "User", "user@yandex.ru", "password", Role.USER);
     public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN, Role.USER);
 
+    static {
+        user.setMeals(MealTestData.userMeals);
+        admin.setMeals(MealTestData.adminMeals);
+    }
+
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.USER));
     }

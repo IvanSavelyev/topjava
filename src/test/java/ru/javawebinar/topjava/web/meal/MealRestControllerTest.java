@@ -57,7 +57,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(MealRestController.REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.getTos(mealsUser, USER_CALORIES_PER_DAY)));
+                .andExpect(result -> MealsUtil.getTos(userMeals, USER_CALORIES_PER_DAY));
     }
 
     @Test
@@ -84,7 +84,10 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .param("endDate", "2021-01-01").param("endTime", "21:01"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.createTo(meal7, true), MealsUtil.createTo(meal3, false)));
+                .andExpect(result -> {
+                    MealsUtil.createTo(meal7, true);
+                    MealsUtil.createTo(meal3, false);
+                });
     }
 
     @Test
@@ -92,6 +95,6 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(MealRestController.REST_URL + "/filter?startDate="))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.getTos(mealsUser, USER_CALORIES_PER_DAY)));
+                .andExpect(result -> MealsUtil.getTos(userMeals, USER_CALORIES_PER_DAY));
     }
 }

@@ -39,9 +39,7 @@
         <property name="fallbackToSystemLocale" value="false"/>
     </bean>
 
-    <bean id="modelMapper" class="org.modelmapper.ModelMapper"/>
-
-    <!--    <mvc:annotation-driven />-->
+    <!--    <bean id="modelMapper" class="org.modelmapper.ModelMapper"/>-->
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatters">
