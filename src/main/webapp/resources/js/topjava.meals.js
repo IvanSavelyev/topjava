@@ -1,8 +1,6 @@
 const mealAjaxUrl = "/rest/profile/meals";
 
-const ctx = {
-    ajaxUrl: mealAjaxUrl
-};
+const ctx = {ajaxUrl: mealAjaxUrl};
 
 $(function () {
     makeEditable(
@@ -31,10 +29,12 @@ $(function () {
             "order": [
                 [
                     0,
-                    "desc"
+                    "decs"
                 ]
             ]
-        }))
+        })
+    );
+    updateSearchResults();
 });
 
 function updateFilter() {
@@ -44,7 +44,6 @@ function updateFilter() {
         data: $("#filter").serialize(),
         success: "ggggg"
     }).done(function () {
-        ctx.datatableApi.clear().rows.add(data).draw();
-
+        updateTable();
     });
 }

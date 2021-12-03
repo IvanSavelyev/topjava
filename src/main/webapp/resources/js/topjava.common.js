@@ -18,9 +18,32 @@ function makeEditable(datatableApi) {
 }
 
 function add() {
-    form.find(":input").val("");
+    $("#detailsForm").find(":input").val("");
     $("#editRow").modal();
 }
+
+function update(id) {
+    form.find(":input").val("");
+
+    $.get(ctx.ajaxUrl + id, function (data) {
+        populate(form, data)
+    });
+}
+
+// $("#form").submit( function(eventObj) {
+//     $("<input />").attr("dateTime", eventObj.data.)
+//         .attr("description", "something")
+//         .attr("calories", "something")
+//         .appendTo("#form");
+//     return true;
+// });
+
+function populate(frm, data) {
+    $.each(data, function (key, value) {
+        $('[name=' + key + ']', frm).val(value);
+    });
+}
+
 
 function deleteRow(id) {
     $.ajax({
