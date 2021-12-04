@@ -23,9 +23,8 @@ function add() {
 }
 
 function update(id) {
-    form.find(":input").val("");
-
-    $.get(ctx.ajaxUrl + id, function (data) {
+    $("#detailsForm").find(":input").val("");
+    $.get(ctx.ajaxUrl + "/" + id, function (data) {
         populate(form, data)
     });
 }
@@ -47,7 +46,7 @@ function populate(frm, data) {
 
 function deleteRow(id) {
     $.ajax({
-        url: ctx.ajaxUrl + id,
+        url: ctx.ajaxUrl + "/" + id,
         type: "DELETE"
     }).done(function () {
         updateTable();
