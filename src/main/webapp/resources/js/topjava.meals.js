@@ -1,4 +1,4 @@
-const mealAjaxUrl = "profile/meals";
+const mealAjaxUrl = "profile/meals/";
 
 const ctx = {
     ajaxUrl: mealAjaxUrl
@@ -18,11 +18,14 @@ let table = $("#datatable").DataTable({
                 "data": "calories"
             },
             {
-                "defaultContent": "",
+                "data": null,
+                "className": "edit",
+                "defaultContent": '<i class="fa fa-pencil"/>',
                 "orderable": false
             },
             {
-                "defaultContent": "",
+                "data": "",
+                "className": "delete",
                 "orderable": false
             }
         ],
@@ -35,23 +38,21 @@ let table = $("#datatable").DataTable({
     }
 );
 
-
 $(function () {
-        makeEditable(table)
-        // ctx.updateTable();
-    }
-);
-
+    makeEditable(table);
+    // updateFilter();
+});
 
 function updateFilter() {
     $.ajax({
         type: "GET",
-        url: ctx.ajaxUrl + "/filter",
+        url: ctx.ajaxUrl + "filter",
+        contentType: 'application/json',
         data: $("#filter").serialize()
-    }).done(updateTable);
+    }).done(updateTableWithGet);
 }
 
 function clear() {
     $("filter")[0].reset();
-    $.get(mealAjaxUrl, updateTable)
+    $.get(mealAjaxUrl, updateTableWithGet)
 }
