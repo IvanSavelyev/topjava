@@ -9,31 +9,29 @@ let table_user = $("#datatable").DataTable({
     "paging": false,
     "info": true,
     "columns": [{
-            "data": "name"
-        }, {
-            "data": "email"
-        }, {
-            "data": "roles"
-        }, {
-            "data": "enabled"
-        }, {
-            "data": "registered"
-        }, {
-            "defaultContent": "Edit",
-            "orderable": false
-        }, {
+        "data": "name"
+    }, {
+        "data": "email"
+    }, {
+        "data": "roles"
+    }, {
+        "data": "enabled"
+    }, {
+        "data": "registered"
+    }, {
+        "defaultContent": "Edit",
+        "orderable": false
+    }, {
         "defaultContent": "Delete",
-            "orderable": false
-        }],
+        "orderable": false
+    }],
     "order": [[
-            0,
-            "asc"
-        ]]
+        0,
+        "asc"
+    ]]
 });
 
 // $(document).ready(function () {
 $(function () {
     makeEditable(table_user);
 });
-
-

@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -8,8 +9,11 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 
 @RestController
 @RequestMapping(value = MealUIController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,13 +41,11 @@ public class MealUIController extends AbstractMealController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createOrUpdate(@RequestBody Meal meal) {
-        if (meal.isNew()) {
-            super.create(meal);
-        } else {
-            super.update(meal, meal.id());
-        }
-
+    public void create(@RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime dateTime,
+                       @RequestParam String description,
+                       @RequestParam int calories) {
+        Meal meal = new Meal(null, dateTime, description, calories);
+        super.create(meal);
     }
 
     @GetMapping("/filter")

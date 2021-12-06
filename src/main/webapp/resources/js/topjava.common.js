@@ -23,12 +23,10 @@ function deleteRow(id) {
             url: ctx.ajaxUrl + id,
             type: "DELETE"
         }).done(function () {
+            updateTableByGet();
             successNoty("Deleted");
-        });
+        }).fail(failNoty);
     }
-}
-
-function editRow(id) {
 }
 
 
@@ -40,20 +38,22 @@ function updateTableByGet() {
 
 function updateTableByData(data) {
     ctx.datatableApi.clear().rows.add(data).draw();
-    // ctx.datatableApi.clear().rows.add(data).draw();
 }
 
 function save() {
+    let formData = $('#detailsForm').serializeArray();
+
     $.ajax({
         type: "POST",
         url: ctx.ajaxUrl,
-        // contentType: 'application/json',
-        data: form.serialize()
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
+        data: formData
     }).done(function () {
         $("#editRow").modal("hide");
         updateTableByGet();
         successNoty("Saved");
-    });
+    }).fail(failNoty).always(console.log(formData));
 }
 
 let failedNote;

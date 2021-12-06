@@ -25,9 +25,11 @@
                         </div>
                         <div class="form-group">
                             <label><spring:message code="meal.startTime"/>:</label>
-                            <input class="form-control" type="time" name="startTime" id="startTime" value="${param.startTime}">
+                            <input class="form-control" type="time" name="startTime" id="startTime"
+                                   value="${param.startTime}">
                             <label><spring:message code="meal.endTime"/>:</label>
-                            <input class="form-control" type="time" name="endTime" id="endTime" value="${param.endTime}">
+                            <input class="form-control" type="time" name="endTime" id="endTime"
+                                   value="${param.endTime}">
                         </div>
                     </div>
                 </form>
@@ -35,7 +37,7 @@
             <div class="card-footer text-left">
                 <button class="btn btn-warning" onclick="clear()"><spring:message
                         code="meal.clear"/></button>
-                <button class="btn btn-primary" onclick="updateFilter()"><spring:message
+                <button class="btn btn-primary" onclick="filter()"><spring:message
                         code="meal.filter"/></button>
             </div>
         </div>
