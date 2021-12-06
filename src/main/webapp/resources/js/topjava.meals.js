@@ -1,46 +1,43 @@
 const mealAjaxUrl = "profile/meals/";
 
+
 const ctx = {
     ajaxUrl: mealAjaxUrl
 };
 
-let table = $("#datatable").DataTable({
-        "paging": false,
-        "info": true,
-        "columns": [
-            {
-                "data": "dateTime"
-            },
-            {
-                "data": "description"
-            },
-            {
-                "data": "calories"
-            },
-            {
-                "data": null,
-                "className": "edit",
-                "defaultContent": '<i class="fa fa-pencil"/>',
-                "orderable": false
-            },
-            {
-                "data": "",
-                "className": "delete",
-                "orderable": false
-            }
-        ],
-        "order": [
-            [
-                0,
-                "decs"
-            ]
-        ]
-    }
-);
+
+let table_meal = $("#datatable").DataTable({
+    "paging": false,
+    "info": true,
+    "columns": [{
+        "data": "dateTime"
+    }, {
+        "data": "description"
+    }, {
+        "data": "calories"
+    }, {
+        "defaultContent": "Edit",
+        "orderable": false
+    }, {
+        "defaultContent": "Delete",
+        "orderable": false
+    }],
+    "order": [[
+        0,
+        "desc"
+    ]]
+});
+
 
 $(function () {
-    makeEditable(table);
-    // updateFilter();
+    makeEditable(table_meal);
+
+    form.submit(function () {
+        save();
+    })
+    let startDate = $("#startDate");
+    let endDate = $("#endDate");
+
 });
 
 function updateFilter() {
@@ -49,10 +46,11 @@ function updateFilter() {
         url: ctx.ajaxUrl + "filter",
         contentType: 'application/json',
         data: $("#filter").serialize()
-    }).done(updateTableWithGet);
+    }).done(updateTableByGet);
 }
 
 function clear() {
-    $("filter")[0].reset();
-    $.get(mealAjaxUrl, updateTableWithGet)
+    $("#filter")[0].reset();
+
+    // $.get(mealAjaxUrl, updateTableWithGet)
 }

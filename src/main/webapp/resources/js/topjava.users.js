@@ -5,45 +5,35 @@ const ctx = {
     ajaxUrl: userAjaxUrl
 };
 
-let table = $("#datatable").DataTable({
+let table_user = $("#datatable").DataTable({
     "paging": false,
     "info": true,
-    "columns": [
-        {
+    "columns": [{
             "data": "name"
-        },
-        {
+        }, {
             "data": "email"
-        },
-        {
+        }, {
             "data": "roles"
-        },
-        {
+        }, {
             "data": "enabled"
-        },
-        {
+        }, {
             "data": "registered"
-        },
-        {
+        }, {
             "defaultContent": "Edit",
             "orderable": false
-        },
-        {
-            "defaultContent": "Delete",
+        }, {
+        "defaultContent": "Delete",
             "orderable": false
-        }
-    ],
-    "order": [
-        [
+        }],
+    "order": [[
             0,
             "asc"
-        ]
-    ]
+        ]]
 });
 
 // $(document).ready(function () {
 $(function () {
-    makeEditable(table);
+    makeEditable(table_user);
 });
 
 

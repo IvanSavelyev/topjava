@@ -17,21 +17,17 @@
             <div class="card-body pb-0">
                 <form id="filter">
                     <div class="col">
-                        <div class="row-cols-1">
+                        <div class="form-group">
                             <label><spring:message code="meal.startDate"/>:</label>
-                            <input class="form-control" type="date" name="startDate" value="${param.startDate}">
-                        </div>
-                        <div class="row-cols-2">
+                            <input class="form-control" type="date" name="startDate" id="startDate" value="${param.startDate}">
                             <label><spring:message code="meal.endDate"/>:</label>
-                            <input class="form-control" type="date" name="endDate" value="${param.endDate}">
+                            <input class="form-control" type="date" name="endDate" id="endDate" value="${param.endDate}">
                         </div>
-                        <div class="row-cols-3">
+                        <div class="form-group">
                             <label><spring:message code="meal.startTime"/>:</label>
-                            <input class="form-control" type="time" name="startTime" value="${param.startTime}">
-                        </div>
-                        <div class="row-cols-4">
+                            <input class="form-control" type="time" name="startTime" id="startTime" value="${param.startTime}">
                             <label><spring:message code="meal.endTime"/>:</label>
-                            <input class="form-control" type="time" name="endTime" value="${param.endTime}">
+                            <input class="form-control" type="time" name="endTime" id="endTime" value="${param.endTime}">
                         </div>
                     </div>
                 </form>
@@ -44,6 +40,10 @@
             </div>
         </div>
 
+        <button class="btn btn-primary" onclick="add()">
+            <span class="fa fa-plus"></span>
+            <spring:message code="common.add"/>
+        </button>
 
         <table class="table table-striped" id="datatable">
             <thead>
@@ -55,14 +55,13 @@
                 <th></th>
             </tr>
             </thead>
-            <c:forEach items="${requestScope.meals}" var="meal">
+            <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-                <tr data-meal-excess="${meal.excess}">
+                <tr data-meal-excess="${meal.excess}" id="${meal.id}">
                     <td>${fn:formatDateTime(meal.dateTime)}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
-                        <%--                    <td><a class="update" onclick="update(${meal.id})"><span class="fa fa-pencil"></span></a></td>--%>
-                    <td></td>
+                    <td><a><span class="fa fa-pencil"></span></a></td>
                     <td><a onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
