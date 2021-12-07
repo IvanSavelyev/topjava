@@ -19,10 +19,14 @@ let table_user = $("#datatable").DataTable({
     }, {
         "data": "registered"
     }, {
-        "defaultContent": "Edit",
+        "data": null,
+        "className": "edit",
+        "defaultContent": '<i class="fa fa-pencil"/>',
         "orderable": false
     }, {
-        "defaultContent": "Delete",
+        "data": null,
+        "className": "delete",
+        "defaultContent": '<i class="fa fa-remove"/>',
         "orderable": false
     }],
     "order": [[
@@ -36,15 +40,13 @@ $(function () {
     makeEditable(table_user);
 });
 
-function userEnable(id) {
-    let enable = $("#checkbox").is(":checked");
-
+function userEnable(id, checkBox) {
+    let enable = checkBox.is(":checked");
     $.ajax({
         type: "POST",
         url: ctx.ajaxUrl + id,
         data: "enable=" + enable
     }).done(function () {
-        $("#checkbox").prop("checked", !!enable );
-        successNoty(enable ? "Enabled": "Disabled");
-    }).always(printLog("Post ajax enable user method with status: " + enable + "\nwith path:" + ctx.ajaxUrl + id));
+        successNoty(enable ? "Enabled" : "Disabled");
+    });
 }

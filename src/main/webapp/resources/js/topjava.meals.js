@@ -14,15 +14,14 @@ let table_meal = $("#datatable").DataTable({
     }, {
         "data": "calories"
     }, {
-        "defaultContent": "Edit",
+        "data": null,
+        "className": "edit",
+        "defaultContent": '<i class="fa fa-pencil"/>',
         "orderable": false
-        // "render": function (data, type, row) {
-        //     if(type === "display"){
-        //         return "<a class=\"fa fa-pencil\">"
-        //     }
-        // }
     }, {
-        "defaultContent": "Delete",
+        "data": null,
+        "className": "delete",
+        "defaultContent": '<i class="fa fa-remove"/>',
         "orderable": false
     }],
     "order": [[

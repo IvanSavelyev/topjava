@@ -5,9 +5,9 @@ function makeEditable(datatableApi) {
 
     form = $('#detailsForm');
 
-    $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
-    })
+    $('.delete').on('click', function () {
+        deleteRow($(this).closest('tr').attr("id"));
+    });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -35,11 +35,15 @@ function deleteRow(id) {
 }
 
 function updateTableByGet() {
-    $.get(ctx.ajaxUrl, updateTableByData );
+    $.get(ctx.ajaxUrl, updateTableByData);
 }
 
 function updateTableByData(data) {
     ctx.datatableApi.clear().rows.add(data).draw();
+}
+
+function refreshTable() {
+    ctx.datatableApi.ajax().reload();
 }
 
 function save() {
@@ -84,6 +88,6 @@ function failNoty(jqXHR) {
     failedNote.show()
 }
 
-function printLog(msg){
+function printLog(msg) {
     console.log(msg);
 }
