@@ -19,17 +19,15 @@
                     <div class="col">
                         <div class="form-group">
                             <label><spring:message code="meal.startDate"/>:</label>
-                            <input class="form-control" type="date" name="startDate" id="startDate" value="${param.startDate}">
+                            <input class="form-control" type="date" name="startDate" id="startDate">
                             <label><spring:message code="meal.endDate"/>:</label>
-                            <input class="form-control" type="date" name="endDate" id="endDate" value="${param.endDate}">
+                            <input class="form-control" type="date" name="endDate" id="endDate">
                         </div>
                         <div class="form-group">
                             <label><spring:message code="meal.startTime"/>:</label>
-                            <input class="form-control" type="time" name="startTime" id="startTime"
-                                   value="${param.startTime}">
+                            <input class="form-control" type="time" name="startTime" id="startTime">
                             <label><spring:message code="meal.endTime"/>:</label>
-                            <input class="form-control" type="time" name="endTime" id="endTime"
-                                   value="${param.endTime}">
+                            <input class="form-control" type="time" name="endTime" id="endTime">
                         </div>
                     </div>
                 </form>
