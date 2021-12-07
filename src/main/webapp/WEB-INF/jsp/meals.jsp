@@ -35,7 +35,7 @@
                 </form>
             </div>
             <div class="card-footer text-left">
-                <button class="btn btn-warning" onclick="clear()"><spring:message
+                <button class="btn btn-warning" onclick="clearFilter()"><spring:message
                         code="meal.clear"/></button>
                 <button class="btn btn-primary" onclick="filter()"><spring:message
                         code="meal.filter"/></button>
@@ -75,7 +75,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.edit'}"/></h4>
+                <h4 class="modal-title"><spring:message code="${meal.id == null ? 'meal.add' : 'meal.edit'}"/></h4>
                 <button type="button" class="close" data-dismiss="modal" onclick="closeNoty()">&times;</button>
             </div>
             <div class="modal-body">

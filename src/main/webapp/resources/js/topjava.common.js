@@ -2,11 +2,16 @@ let form;
 
 function makeEditable(datatableApi) {
     ctx.datatableApi = datatableApi;
+
     form = $('#detailsForm');
 
     $('.delete').click(function () {
         deleteRow($(this).attr("id"));
     })
+
+    $(document).ajaxError(function (event, jqXHR, options, jsExc) {
+        failNoty(jqXHR);
+    });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
@@ -25,15 +30,12 @@ function deleteRow(id) {
         }).done(function () {
             updateTableByGet();
             successNoty("Deleted");
-        }).fail(failNoty);
+        }).always(printLog("Delete ajax method with path: " + ctx.ajaxUrl + id));
     }
 }
 
-
 function updateTableByGet() {
-    $.get(ctx.ajaxUrl, function (data) {
-        ctx.datatableApi.clear().rows.add(data).draw();
-    });
+    $.get(ctx.ajaxUrl, updateTableByData );
 }
 
 function updateTableByData(data) {
@@ -41,19 +43,16 @@ function updateTableByData(data) {
 }
 
 function save() {
-    let formData = $('#detailsForm').serializeArray();
-
+    let formData = form.serialize()
     $.ajax({
         type: "POST",
         url: ctx.ajaxUrl,
-        dataType: 'json',
-        contentType: 'application/json;charset=UTF-8',
         data: formData
     }).done(function () {
         $("#editRow").modal("hide");
         updateTableByGet();
         successNoty("Saved");
-    }).fail(failNoty).always(console.log(formData));
+    }).always(printLog("Post ajax method with path: " + ctx.ajaxUrl + formData));
 }
 
 let failedNote;
@@ -83,4 +82,8 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     });
     failedNote.show()
+}
+
+function printLog(msg){
+    console.log(msg);
 }

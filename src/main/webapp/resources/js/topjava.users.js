@@ -35,3 +35,16 @@ let table_user = $("#datatable").DataTable({
 $(function () {
     makeEditable(table_user);
 });
+
+function userEnable(id) {
+    let enable = $("#checkbox").is(":checked");
+
+    $.ajax({
+        type: "POST",
+        url: ctx.ajaxUrl + id,
+        data: "enable=" + enable
+    }).done(function () {
+        $("#checkbox").prop("checked", !!enable );
+        successNoty(enable ? "Enabled": "Disabled");
+    }).always(printLog("Post ajax enable user method with status: " + enable + "\nwith path:" + ctx.ajaxUrl + id));
+}

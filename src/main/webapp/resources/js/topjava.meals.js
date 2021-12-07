@@ -16,6 +16,11 @@ let table_meal = $("#datatable").DataTable({
     }, {
         "defaultContent": "Edit",
         "orderable": false
+        // "render": function (data, type, row) {
+        //     if(type === "display"){
+        //         return "<a class=\"fa fa-pencil\">"
+        //     }
+        // }
     }, {
         "defaultContent": "Delete",
         "orderable": false
@@ -30,6 +35,12 @@ $(function () {
     makeEditable(table_meal);
 });
 
+
+function clearFilter() {
+    $("#filter").find(":input").val("");
+    updateTableByGet();
+}
+
 function filter() {
     let filter = $("#filter");
 
@@ -37,9 +48,5 @@ function filter() {
         type: "GET",
         url: ctx.ajaxUrl + "filter",
         data: filter.serialize()
-    }).done(updateTableByData).fail(failNoty);
-}
-
-function clear() {
-    location.reload();
+    }).done(updateTableByData).always(console.log("Filter url:" + ctx.ajaxUrl + "filter"));
 }
