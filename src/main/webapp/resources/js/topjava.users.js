@@ -47,6 +47,7 @@ function userEnable(id, checkBox) {
         url: ctx.ajaxUrl + id,
         data: "enable=" + enable
     }).done(function () {
+        checkBox.closest("tr").attr("data-user-enable", enable);
         successNoty(enable ? "Enabled" : "Disabled");
     });
 }

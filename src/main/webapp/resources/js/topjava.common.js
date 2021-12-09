@@ -42,10 +42,6 @@ function updateTableByData(data) {
     ctx.datatableApi.clear().rows.add(data).draw();
 }
 
-function refreshTable() {
-    ctx.datatableApi.ajax().reload();
-}
-
 function save() {
     let formData = form.serialize()
     $.ajax({

@@ -36,7 +36,7 @@ $(function () {
 
 
 function clearFilter() {
-    $("#filter").find(":input").val("");
+    $("#filter").trigger("reset");
     updateTableByGet();
 }
 
@@ -47,5 +47,8 @@ function filter() {
         type: "GET",
         url: ctx.ajaxUrl + "filter",
         data: filter.serialize()
-    }).done(updateTableByData).always(console.log("Filter url:" + ctx.ajaxUrl + "filter"));
+    }).done(function () {
+            updateTableByData();
+        }
+    ).always(console.log("Filter url:" + ctx.ajaxUrl + "filter"));
 }
