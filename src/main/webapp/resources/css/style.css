@@ -2,7 +2,7 @@ tr[data-meal-excess="false"] {
     color: green;
 }
 
-tr[data-mealExcess="true"] {
+tr[data-meal-excess="true"] {
     color: red;
 }
 
@@ -37,11 +37,9 @@ html {
     position: relative;
     min-height: 100%;
 }
-
 body {
     margin-bottom: 60px !important; /* Margin bottom by footer height */
 }
-
 .footer {
     position: absolute;
     bottom: 0;
