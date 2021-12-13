@@ -7,7 +7,6 @@ import org.springframework.lang.Nullable;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
@@ -64,9 +63,10 @@ public abstract class AbstractMealController {
     }
 
     public void update(MealTo mealTo, int id) {
-        log.info("update {} with id={}", mealTo, id);
+        int userId = SecurityUtil.authUserId();
+        log.info("update {} with id={}", mealTo, userId);
         assureIdConsistent(mealTo, id);
-        service.update(MealsUtil.createNewFromTo(mealTo), id);
+        service.update(MealsUtil.createFromTo(mealTo), userId);
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class AbstractMealController {
      * </ol>
      */
     public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
-                                            @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+                                   @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
         int userId = SecurityUtil.authUserId();
         log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
 

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,19 +18,24 @@ public class MealTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    private final LocalDateTime dateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateTime;
 
     @NotBlank
     @Size(min = 2, max = 120)
-    private final String description;
+    private String description;
 
     @Range(min = 10, max = 5000)
-    private final int calories;
+    @NotNull
+    private Integer calories;
 
-    private final boolean excess;
+    private boolean excess;
+
+    public MealTo() {
+    }
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, Integer calories, boolean excess) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;
@@ -37,13 +43,15 @@ public class MealTo extends BaseTo implements Serializable {
         this.excess = excess;
     }
 
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories) {
-        super(id);
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-        this.excess = false;
-    }
+
+//    @ConstructorProperties({"id", "dateTime", "description", "calories"})
+//    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories) {
+//        super(id);
+//        this.dateTime = dateTime;
+//        this.description = description;
+//        this.calories = calories;
+//        this.excess = false;
+//    }
 
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -59,6 +67,22 @@ public class MealTo extends BaseTo implements Serializable {
 
     public boolean isExcess() {
         return excess;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
     }
 
     @Override
