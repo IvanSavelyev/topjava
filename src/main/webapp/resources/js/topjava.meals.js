@@ -1,5 +1,6 @@
 const mealAjaxUrl = "profile/meals/";
 
+
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
     ajaxUrl: mealAjaxUrl,
@@ -66,4 +67,41 @@ $(function () {
             }
         })
     );
+});
+let endDate = $('#endDate');
+let startDate = $('#startDate');
+
+startDate.datetimepicker({
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: startDate.val() ? startDate.val() : false
+        })
+    },
+    timepicker: false
+});
+
+endDate.datetimepicker({
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: endDate.val() ? endDate.val() : false
+        })
+    },
+    timepicker: false
+});
+
+$('#endTime').datetimepicker({
+    datepicker: false,
+    format: 'H:i'
+});
+
+$('#startTime').datetimepicker({
+    datepicker: false,
+    format: 'H:i'
+});
+
+$('#dateTime').datetimepicker({
+    datepicker: false,
+    format: 'Y.m.d H:i'
 });

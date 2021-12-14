@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.WebUtil.getBindingResult;
+import static ru.javawebinar.topjava.util.WebUtil.getBindingErrors;
 
 @RestController
 @RequestMapping(value = "/profile/meals", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,7 +43,7 @@ public class MealUIController extends AbstractMealController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> createOrUpdate(@Valid MealTo mealTo, BindingResult result) {
         if (result.hasErrors()) {
-            return getBindingResult(result);
+            return getBindingErrors(result);
         }
         if (mealTo.isNew()) {
             super.create(mealTo);

@@ -8,14 +8,10 @@ import java.util.stream.Collectors;
 
 public class WebUtil {
 
-    public static ResponseEntity<String> getBindingResult(BindingResult result) {
-//        if (result.hasErrors()) {
+    public static ResponseEntity<String> getBindingErrors(BindingResult result) {
         String errorFieldsMsg = result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.joining("<br>"));
-        return new ResponseEntity<>(errorFieldsMsg, HttpStatus.UNPROCESSABLE_ENTITY);// ResponseEntity.unprocessableEntity().body(errorFieldsMsg);
-//        } else {
-//            return null;
-//        }
+        return new ResponseEntity<>(errorFieldsMsg, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }
