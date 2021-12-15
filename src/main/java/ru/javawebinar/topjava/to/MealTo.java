@@ -1,11 +1,10 @@
 package ru.javawebinar.topjava.to;
 
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo implements Serializable {
+public class MealTo extends BaseTo {
 
     private final LocalDateTime dateTime;
 
