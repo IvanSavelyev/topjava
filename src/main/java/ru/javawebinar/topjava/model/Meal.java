@@ -32,8 +32,6 @@ public class Meal extends AbstractBaseEntity implements Serializable {
     public static final String GET_BETWEEN = "Meal.getBetween";
 
     @Column(name = "date_time", nullable = false)
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull
     private LocalDateTime dateTime;
 

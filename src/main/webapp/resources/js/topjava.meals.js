@@ -101,6 +101,7 @@ $('#startTime').datetimepicker({
     format: 'H:i'
 });
 
-$('#dateTime').datetimepicker({
-    format: 'Y-m-d H:i'
+let dateTime = $('#dateTime');
+dateTime.datetimepicker({
+    format: 'Y-m-d\\TH:i'
 });

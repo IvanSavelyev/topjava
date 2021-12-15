@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class WebUtil {
 
-    public static ResponseEntity<String> getBindingErrors(BindingResult result) {
+    public static ResponseEntity<String> getBindingResponse(BindingResult result) {
         String errorFieldsMsg = result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.joining("<br>"));
