@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import org.hibernate.Hibernate;
+import org.springframework.util.Assert;
 import ru.javawebinar.topjava.HasId;
 
 import javax.persistence.*;
