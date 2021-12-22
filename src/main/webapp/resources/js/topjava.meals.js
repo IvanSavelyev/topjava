@@ -35,6 +35,7 @@ $.ajaxSetup({
 });
 
 $(function () {
+
     makeEditable({
         "columns": [
             {
@@ -67,7 +68,8 @@ $(function () {
             $(row).attr("data-meal-excess", data.excess);
         }
     });
-
+    let localeCode = "${pageContext.response.locale}";
+    $.datetimepicker.setLocale(localeCode);
 //  http://xdsoft.net/jqplugins/datetimepicker/
     var startDate = $('#startDate');
     var endDate = $('#endDate');
@@ -117,3 +119,4 @@ $(function () {
         format: 'Y-m-d H:i'
     });
 });
+

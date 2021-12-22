@@ -10,6 +10,7 @@
 
     <title><spring:message code="app.title"/></title>
     <base href="${pageContext.request.contextPath}/"/>
+<%--    <jsp:include page="locale.jsp">--%>
 
     <link rel="stylesheet" href="resources/css/style.css?v=2">
     <link rel="stylesheet" href="webjars/bootstrap/4.6.1/css/bootstrap.min.css">
