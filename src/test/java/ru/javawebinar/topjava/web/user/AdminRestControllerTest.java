@@ -156,10 +156,21 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testUpdateInvalid() throws Exception {
+    public void updateInvalid() throws Exception {
         perform(MockMvcRequestBuilders.put(REST_URL).with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(broken)))
+                .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
+
+    @Test
+    public void updateDublicateEmail() throws Exception {
+        User user = getUpdated();
+        user.setEmail(admin.getEmail());
+        perform(MockMvcRequestBuilders.put(REST_URL).with(userHttpBasic(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(user)))
                 .andExpect(status().is4xxClientError())
                 .andDo(print());
     }

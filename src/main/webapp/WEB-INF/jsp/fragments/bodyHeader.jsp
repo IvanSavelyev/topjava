@@ -27,6 +27,6 @@
                 </button>
             </form:form>
         </sec:authorize>
-        <jsp:include page="fragments/locale.jsp"/>
+        <jsp:include page="locale.jsp"/>
     </div>
 </nav>
