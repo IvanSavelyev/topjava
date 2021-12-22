@@ -6,7 +6,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
-import ru.javawebinar.topjava.web.validator.CheckDublicateEmail;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -30,7 +29,6 @@ import static ru.javawebinar.topjava.util.UserUtil.DEFAULT_CALORIES_PER_DAY;
 })
 @Entity
 @Table(name = "users")
-@CheckDublicateEmail
 public class User extends AbstractNamedEntity {
 
     public static final String DELETE = "User.delete";
